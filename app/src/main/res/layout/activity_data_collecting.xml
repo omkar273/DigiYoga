@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DataCollectingActivity">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="352dp"
+        android:layout_height="20dp"
+        android:outlineAmbientShadowColor="@color/black"
+        android:progressDrawable="@drawable/progressbar_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.018" />
+
+    <TextView
+        android:id="@+id/Question"
+        android:layout_width="379dp"
+        android:layout_height="94dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="36dp"
+        android:gravity="top"
+        android:lineSpacingExtra="1sp"
+        android:text="HOW ACTIVE ARE YOU IN DAILY LIFE ?"
+        android:textColor="#000000"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:translationY="-0.64sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
+    <TextView
+        android:layout_width="299dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="12dp"
+        android:gravity="top"
+        android:lineSpacingExtra="1sp"
+        android:text="this help us design your yogasnas to fit your lifestyle"
+        android:textSize="16sp"
+        android:translationY="-0.32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.142"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Question" />
+
+    <RadioGroup
+        android:layout_width="338dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.589"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Question"
+        app:layout_constraintVertical_bias="0.242">
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/rectangle_with_border1"
+            android:drawableEnd="@drawable/icon_atenna_bar1"
+            android:paddingLeft="10dp"
+            android:paddingEnd="10dp"
+            android:text="Not at All"
+            android:textSize="20dp"
+            android:textStyle="normal" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/rectangle_with_border1"
+            android:drawableEnd="@drawable/icon_atenna_bar2"
+            android:paddingLeft="10dp"
+
+            android:paddingEnd="10dp"
+            android:text="Slightly Active"
+            android:textSize="20dp"
+            android:textStyle="normal" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/rectangle_with_border1"
+            android:drawableEnd="@drawable/icon_atenna_bar3"
+            android:paddingLeft="10dp"
+            android:paddingEnd="10dp"
+            android:text="Active"
+            android:textSize="20dp"
+
+            android:textStyle="normal" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/rectangle_with_border1"
+            android:drawableEnd="@drawable/icon_atenna_bar4"
+            android:paddingLeft="10dp"
+            android:paddingEnd="10dp"
+
+            android:text="Very Active"
+            android:textSize="20dp"
+            android:textStyle="normal" />
+
+
+    </RadioGroup>
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="390dp"
+        android:layout_height="2dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="136dp"
+        android:background="@drawable/line"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip4"
+        android:layout_width="292dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginBottom="40dp"
+        android:background="#53BBA8"
+        android:backgroundTint="#53BBA8"
+        android:text="Confirm"
+        android:textAlignment="center"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view3" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
