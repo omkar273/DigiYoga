@@ -4,35 +4,191 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_screen_background"
     tools:context=".SplashActivity">
 
+
     <ImageView
-        android:id="@+id/splash_screen_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:foregroundGravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="411dp"
+        android:layout_height="348dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.215"
-        app:srcCompat="@drawable/circle_shape" />
+        app:srcCompat="@drawable/semi_circle" />
 
-    <TextView
-        android:id="@+id/app_name"
-        android:layout_width="169dp"
-        android:layout_height="46dp"
-        android:fontFamily="cursive"
-        android:gravity="center"
-        android:text="DIGI Yoga"
-        android:textColor="#000"
-        android:textSize="34sp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="350dp"
+        android:layout_height="550dp"
+        android:layout_marginBottom="?actionBarSize"
+        android:backgroundTint="#43d6b9"
+        android:elevation="@dimen/_10sdp"
+        android:outlineAmbientShadowColor="@color/black"
+        android:outlineSpotShadowColor="@color/black"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="@dimen/_10sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/splash_screen_logo"
-        app:layout_constraintVertical_bias="0.224" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/splash_constrain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/splash_screen_logo"
+                android:layout_width="352dp"
+                android:layout_height="533dp"
+                android:layout_marginStart="53dp"
+                android:layout_marginEnd="53dp"
+                android:layout_marginBottom="108dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/splash_screen_app_logo" />
+
+            <TextView
+                android:id="@+id/splash_screen_quote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="60dp"
+                android:fontFamily="@font/alegreya_medium"
+                android:gravity="center"
+
+                android:text="@string/splash_screen_quote"
+                android:textColor="#fff"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/alegreya_medium"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="#fff"
+                android:textSize="@dimen/_30sdp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/splash_screen_logo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/after_splash_constrain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/login_button"
+                android:layout_width="300dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="144dp"
+                android:background="#246C5E"
+                android:backgroundTint="#246C5E"
+                android:elevation="@dimen/_20sdp"
+                android:fontFamily="@font/alegreya_bold"
+                android:shadowColor="@color/black"
+                android:text="Login"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="@dimen/_16sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.68"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/register_button"
+                android:layout_width="300dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="4dp"
+                android:background="#246C5E"
+                android:backgroundTint="#246C5E"
+                android:elevation="@dimen/_20sdp"
+                android:fontFamily="@font/alegreya_bold"
+                android:shadowColor="@color/black"
+                android:text="@string/Register"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="@dimen/_16sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.68"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/login_button" />
+
+            <TextView
+                android:id="@+id/orText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="128dp"
+                android:fontFamily="@font/alegreya_bold"
+                android:text="or"
+                android:textSize="@dimen/_22sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <LinearLayout
+                android:layout_width="348dp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/orText">
+
+
+                <ImageView
+                    android:id="@+id/google_logo"
+                    android:layout_width="83dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/google_logo" />
+
+                <ImageView
+                    android:id="@+id/twitter_logo"
+                    android:layout_width="83dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/twitter_logo" />
+
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/imageView5"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="@dimen/_20sdp"-->
+                <!--                    android:layout_marginEnd="@dimen/_20sdp"-->
+                <!--                    android:layout_weight="1"-->
+                <!--                    app:srcCompat="@drawable/google_logo" />-->
+
+            </LinearLayout>
+
+            <!--            <View-->
+            <!--                android:id="@+id/line_1"-->
+            <!--                android:layout_width="329dp"-->
+            <!--                android:layout_height="2dp"-->
+            <!--                android:layout_alignParentLeft="true"-->
+            <!--                android:layout_alignParentTop="true"-->
+            <!--                android:background="@drawable/line"-->
+            <!--                tools:layout_editor_absoluteX="11dp"-->
+            <!--                tools:layout_editor_absoluteY="404dp" />-->
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

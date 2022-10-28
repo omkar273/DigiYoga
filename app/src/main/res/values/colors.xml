@@ -7,4 +7,19 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+    //new theme colour
+    <color name="colorPrimary">#39EDC9</color>
+    <color name="colorPrimaryVariant">#246C5E</color>
+    <color name="colorOnPrimary">#81f0ae</color>
+
+    <color name="colorSecondary">#FFFFFFFF</color>
+    <color name="colorSecondaryVariant">#FFFFFFFF</color>
+    <color name="colorOnSecondary">#FFFFFFFF</color>
+
+
+    <color name="statusBarColor">#046E5C</color>
+
+
 </resources>
