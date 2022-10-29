@@ -1,5 +1,7 @@
 package desno.hackathon.omkar.digiyoga;
 
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.GOOGLE_SIGN_IN_REQUEST_CODE;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,10 +11,18 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -25,6 +35,10 @@ public class SplashActivity extends AppCompatActivity {
     Button login_button, register_button;
     Intent next_activity;
     FirebaseUser user;
+
+    GoogleSignInClient gsc;
+    GoogleSignInOptions gso;
+    GoogleSignInAccount signInAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +69,12 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null && user.isEmailVerified()) {
+
+                user = FirebaseAuth.getInstance().getCurrentUser();
+                initializeGoogleSignIn();
+                signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+
+                if (user != null || signInAccount != null) {
                     startActivity(intent);
                     finish();
                 } else {
@@ -90,5 +108,57 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
+        google_authentification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loginUserByGoogle();
+            }
+        });
+
+
     }
+
+    private void initializeGoogleSignIn() {
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gsc = GoogleSignIn.getClient(this, this.gso);
+    }
+
+    private void loginUserByGoogle() {
+
+        Intent signInIntent = gsc.getSignInIntent();
+        startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE);
+
+        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        if (signInAccount != null) {
+            Toast.makeText(this, "google name : " + signInAccount.getDisplayName(), Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GOOGLE_SIGN_IN_REQUEST_CODE) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+
+            try {
+                task.getResult(ApiException.class);
+                Toast.makeText(this, "logged in sucessfully", Toast.LENGTH_SHORT).show();
+
+                navigateToNextActivity();
+            } catch (ApiException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Some error occured", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void navigateToNextActivity() {
+        Intent intent = new Intent(this, HomePageActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 }

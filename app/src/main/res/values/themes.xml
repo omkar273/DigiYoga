@@ -60,7 +60,7 @@
     <style name="DrawerStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
         <item name="color">
-            #fff
+            #000000
         </item>
         <item name="homeAsUpIndicator">@drawable/ic_baseline_phone_24</item>
 

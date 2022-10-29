@@ -62,7 +62,6 @@ public class RegisterActivity extends AppCompatActivity {
         register = findViewById(R.id.register_button);
         already_have_account = findViewById(R.id.already_have_an_account);
 
-
         /*
          *TODO : create a register function combining both of these function
          * Onclick listners =>
@@ -97,11 +96,11 @@ public class RegisterActivity extends AppCompatActivity {
     private void performAuthentication() {
         String full_name, phone_no, password, confirm_password, email;
 
-        full_name = input_full_name.getText().toString();
-        phone_no = input_phone_no.getText().toString();
-        password = input_password.getText().toString();
-        confirm_password = input_confirm_password.getText().toString();
-        email = input_email.getText().toString();
+        full_name = input_full_name.getText().toString().trim();
+        phone_no = input_phone_no.getText().toString().trim();
+        password = input_password.getText().toString().trim();
+        confirm_password = input_confirm_password.getText().toString().trim();
+        email = input_email.getText().toString().trim();
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(this, "Enter valid Email address !", Toast.LENGTH_SHORT).show();
@@ -191,6 +190,10 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "verification email sent on " + user.getEmail(), Toast.LENGTH_SHORT).show();
                     firebaseAuth.signOut();
 
+//                    Intent intent =  new Intent(RegisterActivity.this , RegisterActivity.class);
+//                    startActivity(intent);
+//                    finish();
+                    clearTextFields();
                 }
             }
         }).addOnFailureListener(RegisterActivity.this, new OnFailureListener() {
@@ -200,5 +203,14 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void clearTextFields() {
+        input_full_name.setText("");
+        input_phone_no.setText("");
+        input_password.setText("");
+        input_confirm_password.setText("");
+        input_email.setText("");
+    }
+
 
 }

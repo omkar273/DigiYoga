@@ -13,11 +13,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="8dp"
+        android:layout_marginStart="@dimen/_10sdp"
         android:gravity="center_vertical"
-        android:lineSpacingExtra="4sp"
+        android:fontFamily="@font/alegreya_semibold"
         android:text="@string/welcome_to_"
-        android:textAppearance="@style/welcome_to_"
         android:textStyle="bold"
+        android:lineSpacingExtra="@dimen/_2sdp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_24sdp"
         android:translationY="-1.98sp"
         app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,9 +47,11 @@
         android:layout_width="351dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginStart="@dimen/_10sdp"
         android:shadowColor="#000000"
         android:text="Please LOG in to continue"
         android:textColor="#221E1E"
+        android:fontFamily="@font/alegreya_regular"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,23 +83,22 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_login_username"
+                android:id="@+id/til_login_email"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10sp"
                 android:layout_marginRight="10sp"
                 android:clickable="false"
-                android:hint="@string/mobile_number">
+                android:hint="@string/email">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tie_login_username"
+                    android:id="@+id/tie_login_email"
                     style="@style/lrf_input_edit_text_style"
                     android:drawableTint="#403D3D"
-                    android:inputType="number"
-                    android:maxLength="@integer/max_phone_no"
-                    app:drawableLeftCompat="@drawable/ic_baseline_phone_24"
-                    app:drawableStartCompat="@drawable/ic_baseline_phone_24" />
+                    android:inputType="textEmailAddress"
+                    app:drawableLeftCompat="@drawable/email_icon"
+                    app:drawableStartCompat="@drawable/email_icon" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -118,6 +122,7 @@
                     app:drawableStartCompat="@drawable/ic_baseline_lock_24" />
 
                 <TextView
+                    android:id="@+id/forget_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -130,7 +135,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/rectangle_4"
+                android:id="@+id/login_button"
                 android:layout_width="302dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
