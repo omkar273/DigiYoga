@@ -13,6 +13,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 
 public class SplashActivity extends AppCompatActivity {
     ImageView logo, google_authentification, twitter_authentification;
@@ -21,6 +24,7 @@ public class SplashActivity extends AppCompatActivity {
 
     Button login_button, register_button;
     Intent next_activity;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +51,23 @@ public class SplashActivity extends AppCompatActivity {
         quote.startAnimation(zoomOut);
 
 
-        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+        Intent intent = new Intent(SplashActivity.this, HomePageActivity.class);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null && user.isEmailVerified()) {
+                    startActivity(intent);
+                    finish();
+                } else {
+                    splash_layout.setVisibility(View.GONE);
+                    after_splash_layout.setVisibility(View.VISIBLE);
+                    login_button.startAnimation(zoomOut);
+                    register_button.startAnimation(zoomOut);
+                    google_authentification.startAnimation(zoomOut);
+                    twitter_authentification.startAnimation(zoomOut);
+                }
 
-                splash_layout.setVisibility(View.GONE);
-                after_splash_layout.setVisibility(View.VISIBLE);
-//                startActivity(intent);
-//                finish();
-                login_button.startAnimation(zoomOut);
-                register_button.startAnimation(zoomOut);
-                google_authentification.startAnimation(zoomOut);
-                twitter_authentification.startAnimation(zoomOut);
             }
         }, 4000);
 
