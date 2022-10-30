@@ -17,6 +17,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -26,8 +31,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Arrays;
+
 
 public class SplashActivity extends AppCompatActivity {
+
+    CallbackManager callbackManager;
     ImageView logo, google_authentification, twitter_authentification;
     TextView app_name, quote;
     ConstraintLayout splash_layout, after_splash_layout;
@@ -64,6 +73,8 @@ public class SplashActivity extends AppCompatActivity {
         app_name.startAnimation(zoomOut);
         quote.startAnimation(zoomOut);
 
+        //facebook callback manager
+        callbackManager = CallbackManager.Factory.create();
 
         Intent intent = new Intent(SplashActivity.this, HomePageActivity.class);
         new Handler().postDelayed(new Runnable() {
@@ -115,6 +126,13 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
+        twitter_authentification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LoginManager.getInstance().logInWithReadPermissions(SplashActivity.this, Arrays.asList("public_profile"));
+            }
+        });
+
 
     }
 
@@ -138,6 +156,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == GOOGLE_SIGN_IN_REQUEST_CODE) {
@@ -161,4 +180,22 @@ public class SplashActivity extends AppCompatActivity {
         finish();
     }
 
+    public void initializeFacebook() {
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+            }
+        });
+    }
 }

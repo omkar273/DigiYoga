@@ -17,4 +17,13 @@
     <string name="splash_screen_quote">
         Yoga is fountain of youth,\n you\'re only as young as your spine is flexible"
     </string>
+
+
+    //facebook integration data
+
+    <string name="facebook_app_id">1234</string>
+    <string name="fb_login_protocol_scheme">fb1234</string>
+    <string name="facebook_client_token">56789</string>
+
+
 </resources>
