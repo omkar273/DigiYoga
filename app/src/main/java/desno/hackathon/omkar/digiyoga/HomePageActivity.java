@@ -1,5 +1,8 @@
 package desno.hackathon.omkar.digiyoga;
 
+import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
+
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -113,15 +117,29 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     public void signOut() {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            FirebaseAuth.getInstance().signOut();
-        } else if (signInAccount != null) {
-            gsc.signOut();
-        }
 
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+
+        Intent intent = new Intent(HomePageActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(FLAG_ACTIVITY_NO_HISTORY);
+
+
+        new AlertDialog.Builder(HomePageActivity.this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Logout").setMessage("Are you sure you want to Sign out").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                            FirebaseAuth.getInstance().signOut();
+                        }
+
+                        if (signInAccount != null) {
+                            gsc.signOut();
+                        }
+
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+        ).setNegativeButton("No", null).show();
     }
 
     public void onclick(View view) {
@@ -130,9 +148,31 @@ public class HomePageActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                text.setTextColor(getResources().getColor(R.color.black));
-
+                text.setTextColor(getResources().getColor(R.color.colorPrimaryVariant));
             }
         }, 100);
+
+        switch (view.getId()) {
+
+            case R.id.edit_profile:
+                break;
+
+            case R.id.settings:
+                break;
+
+            case R.id.feedback:
+                break;
+
+            case R.id.logout:
+                signOut();
+                break;
+
+            case R.id.rate_us:
+                break;
+
+            default:
+                onBackPressed();
+        }
+
     }
 }

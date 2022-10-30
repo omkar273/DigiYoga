@@ -183,6 +183,7 @@
                             android:padding="@dimen/_15sdp">
 
                             <TextView
+                                android:id="@+id/edit_profile"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_15sdp"
@@ -201,6 +202,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
+                                android:id="@+id/settings"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_15sdp"
@@ -219,6 +221,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
+                                android:id="@+id/feedback"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_15sdp"
@@ -238,6 +241,26 @@
 
 
                             <TextView
+                                android:id="@+id/logout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/_15sdp"
+                                android:clickable="true"
+                                android:drawableStart="@drawable/logout_icon"
+                                android:drawableEnd="@drawable/arrow_forward"
+                                android:drawableTint="@color/black"
+                                android:fontFamily="@font/alegreya_regular"
+                                android:gravity="center_vertical"
+                                android:onClick="onclick"
+                                android:text="  Logout"
+                                android:textSize="@dimen/_16sdp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.054"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/rate_us"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
