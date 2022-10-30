@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/Feed"
-        android:icon="@drawable/wallet"
-        android:title="Feed" />
 
     <item
         android:id="@+id/progress"
-        android:icon="@drawable/bottom_nav_progress"
+        android:icon="@drawable/progress_icon_bottom_nav"
         android:title="Progress" />
+
+
+    <item
+        android:id="@+id/Feed"
+        android:icon="@drawable/search_icon_bottom_nav"
+        android:title="Feed" />
+
 
     <item
         android:id="@+id/Home"
-        android:icon="@drawable/home"
+        android:icon="@drawable/home_icon_bottom_nav"
         android:title="Home" />
 
     <item
         android:id="@+id/Plan"
-        android:icon="@drawable/clipboard"
+        android:icon="@drawable/plan_icon_bottom_nav"
         android:title="Plan" />
 
     <item
         android:id="@+id/profile"
-        android:icon="@drawable/woman"
+        android:icon="@drawable/profile_icon"
         android:title="Profile" />
 </menu>

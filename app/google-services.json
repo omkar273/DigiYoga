@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "339259625338",
+    "firebase_url": "https://digital-yoga-app-14c5f-default-rtdb.firebaseio.com",
+    "project_id": "digital-yoga-app-14c5f",
+    "storage_bucket": "digital-yoga-app-14c5f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339259625338:android:eec08b7d214c553fb690c3",
+        "android_client_info": {
+          "package_name": "desno.hackathon.omkar.digiyoga"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339259625338-frbpig8ip3bj1egb9tluj5ktl2103v91.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "desno.hackathon.omkar.digiyoga",
+            "certificate_hash": "71dc851cc502ebdb4dca662f8f03962966ae7845"
+          }
+        },
+        {
+          "client_id": "339259625338-dptjofdhmm89g379kqneco0k6u2korc5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiDKN1U7hXSNudgG76RnRH9BwOYdGptBA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339259625338-1k9na0dokbn7dkm3cq30uojt0k7hdrpm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

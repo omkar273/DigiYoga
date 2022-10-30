@@ -49,6 +49,7 @@ public class SplashActivity extends AppCompatActivity {
     GoogleSignInOptions gso;
     GoogleSignInAccount signInAccount;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +99,7 @@ public class SplashActivity extends AppCompatActivity {
                 }
 
             }
-        }, 4000);
+        }, 3000);
 
 
         //on click listeners
