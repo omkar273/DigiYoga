@@ -6,67 +6,107 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/_56sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/welcome_text"
+            android:id="@+id/greeting_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="26dp"
-            android:layout_marginBottom="7dp"
-            android:fontFamily="@font/alegreya_regular"
+            android:layout_marginTop="23dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/alegreya_extrabold"
             android:gravity="clip_vertical|start|top"
             android:lineSpacingExtra="1sp"
             android:text="WELCOME USER"
             android:textColor="#000000"
             android:textSize="24sp"
             android:translationY="-0.48sp"
-            app:layout_constraintBottom_toTopOf="@+id/email_text"
+            app:layout_constraintBottom_toTopOf="@+id/scrollView3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.265" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/email_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginBottom="624dp"
-            android:fontFamily="@font/alegreya_regular"
-            android:gravity="clip_vertical|start|top"
-            android:lineSpacingExtra="1sp"
-            android:text="WELCOME USER"
-            android:textColor="#000000"
-            android:textSize="@dimen/_14sdp"
-            android:translationY="-0.48sp"
+        <ScrollView
+            android:id="@+id/scrollView3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/welcome_text" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/greeting_text">
 
-        <Button
-            android:id="@+id/logOut_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="488dp"
-            android:text="Logout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical">
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginBottom="4dp"
+                    android:fontFamily="@font/alegreya_semibold"
+                    android:gravity="clip_vertical|start|top"
+                    android:lineSpacingExtra="1sp"
+                    android:text="@string/welcome_text"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    android:translationY="-0.48sp"
+                    app:layout_constraintBottom_toTopOf="@+id/scrollView3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/yoga_quote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginBottom="4dp"
+                    android:fontFamily="@font/alegreya_regular"
+                    android:gravity="clip_vertical|start|top"
+                    android:lineSpacingExtra="1sp"
+                    android:padding="@dimen/_7sdp"
+                    android:text="@string/welcome_text_description"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/_12sdp"
+                    android:translationY="-0.48sp"
+                    app:layout_constraintBottom_toTopOf="@+id/scrollView3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/yoga_workout_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_7sdp" />
+
+                <include layout="@layout/yoga_workout_plan_recycler_layout" />
+            </LinearLayout>
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

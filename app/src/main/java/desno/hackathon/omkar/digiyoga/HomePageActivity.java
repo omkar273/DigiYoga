@@ -1,6 +1,11 @@
 package desno.hackathon.omkar.digiyoga;
 
 import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_PLAN_DESCRIPTION;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_PLAN_ESTIMATED_DAYS;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_PLAN_IMAGE_URL;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_PLAN_NAME;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_WORKOUT_SECTION;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +29,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+
 
 public class HomePageActivity extends AppCompatActivity {
 
@@ -70,6 +80,7 @@ public class HomePageActivity extends AppCompatActivity {
 //            }
 //        });
 
+        setData();
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -109,6 +120,32 @@ public class HomePageActivity extends AppCompatActivity {
         });
     }
 
+    private void setData() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(YOGA_WORKOUT_SECTION);
+
+        HashMap<String, String> yogaPlan = new HashMap<>();
+        HashMap<String, String> yogaPlan1 = new HashMap<>();
+        HashMap<String, String> yogaPlan2 = new HashMap<>();
+
+        yogaPlan.put(YOGA_PLAN_NAME, "demo plan name");
+        yogaPlan.put(YOGA_PLAN_DESCRIPTION, "demo description");
+        yogaPlan.put(YOGA_PLAN_ESTIMATED_DAYS, "demo duration");
+        yogaPlan.put(YOGA_PLAN_IMAGE_URL, "null");
+
+
+        yogaPlan1.put(YOGA_PLAN_NAME, "demo plan name2");
+        yogaPlan1.put(YOGA_PLAN_DESCRIPTION, "demo description2");
+        yogaPlan1.put(YOGA_PLAN_ESTIMATED_DAYS, "demo duration2");
+        yogaPlan1.put(YOGA_PLAN_IMAGE_URL, "null2");
+
+
+//        databaseReference.setValue(yogaPlan);
+        databaseReference.child("1").setValue(yogaPlan1);
+        databaseReference.child("2").setValue(yogaPlan1);
+        databaseReference.child("3").setValue(yogaPlan1);
+
+    }
+
 
     private void initializeGoogleSignIn() {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
@@ -125,21 +162,20 @@ public class HomePageActivity extends AppCompatActivity {
 
 
         new AlertDialog.Builder(HomePageActivity.this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Logout").setMessage("Are you sure you want to Sign out").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                            FirebaseAuth.getInstance().signOut();
-                        }
-
-                        if (signInAccount != null) {
-                            gsc.signOut();
-                        }
-
-                        startActivity(intent);
-                        finish();
-                    }
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    FirebaseAuth.getInstance().signOut();
                 }
-        ).setNegativeButton("No", null).show();
+
+                if (signInAccount != null) {
+                    gsc.signOut();
+                }
+
+                startActivity(intent);
+                finish();
+            }
+        }).setNegativeButton("No", null).show();
     }
 
     public void onclick(View view) {
@@ -155,6 +191,8 @@ public class HomePageActivity extends AppCompatActivity {
         switch (view.getId()) {
 
             case R.id.edit_profile:
+                startActivity(new Intent(HomePageActivity.this, UpdateProfileActivity.class));
+
                 break;
 
             case R.id.settings:
@@ -175,4 +213,5 @@ public class HomePageActivity extends AppCompatActivity {
         }
 
     }
+
 }

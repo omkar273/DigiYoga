@@ -1,6 +1,14 @@
 package desno.hackathon.omkar.digiyoga;
 
 import static android.content.ContentValues.TAG;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USERS_PROFILE_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PASSWORD_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_DISPLAY_NAME_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_DOB_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_EMAIL_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_IMAGE_URL_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_PHONE_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_UID_KEY;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -156,14 +164,16 @@ public class RegisterActivity extends AppCompatActivity {
 
         mRootRef = FirebaseDatabase.getInstance().getReference();
         HashMap<String, String> userProfile = new HashMap<>();
-        userProfile.put("name", full_name);
-        userProfile.put("phone_no", phone_no);
-        userProfile.put("email", email);
-        userProfile.put("password", password);
-        userProfile.put("uId", user.getUid());
+        userProfile.put(USER_UID_KEY, user.getUid());
+        userProfile.put(USER_PROFILE_DISPLAY_NAME_KEY, full_name);
+        userProfile.put(USER_PROFILE_PHONE_KEY, phone_no);
+        userProfile.put(USER_PROFILE_EMAIL_KEY, email);
+        userProfile.put(USER_PROFILE_DOB_KEY, "Not updated");
+        userProfile.put(USER_PASSWORD_KEY, password);
+        userProfile.put(USER_PROFILE_IMAGE_URL_KEY, "null");
 
 
-        mRootRef.child("UserDetails").child(firebaseAuth.getCurrentUser().getUid()).setValue(userProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mRootRef.child(USERS_PROFILE_KEY).child(firebaseAuth.getCurrentUser().getUid()).setValue(userProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -189,10 +199,6 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.d("firebase", "Email sent.");
                     Toast.makeText(RegisterActivity.this, "verification email sent on " + user.getEmail(), Toast.LENGTH_SHORT).show();
                     firebaseAuth.signOut();
-
-//                    Intent intent =  new Intent(RegisterActivity.this , RegisterActivity.class);
-//                    startActivity(intent);
-//                    finish();
                     clearTextFields();
                 }
             }
@@ -211,6 +217,4 @@ public class RegisterActivity extends AppCompatActivity {
         input_confirm_password.setText("");
         input_email.setText("");
     }
-
-
 }

@@ -24,6 +24,10 @@
     <string name="facebook_app_id">1234</string>
     <string name="fb_login_protocol_scheme">fb1234</string>
     <string name="facebook_client_token">56789</string>
+    <string name="displayName">Display Name</string>
+    <string name="dob">Date Of Birth</string>
+    <string name="welcome_text">Top Choices For You</string>
+    <string name="welcome_text_description">Yoga is a great practice for both the body and the mind, it offers peace and mindfulness to its lovers and helps them get through daily stress. Therefore, we have compiled for you some of the most amazing yoga quotes to keep you motivated and excited to get on the mat.</string>
 
 
 </resources>
