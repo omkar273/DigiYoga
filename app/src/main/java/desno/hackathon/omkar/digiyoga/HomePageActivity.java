@@ -1,10 +1,8 @@
 package desno.hackathon.omkar.digiyoga;
 
 import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
-import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_PLAN_DESCRIPTION;
-import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_PLAN_ESTIMATED_DAYS;
-import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_PLAN_IMAGE_URL;
-import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_PLAN_NAME;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.HOMEPAGE_YOGA_QUOTE;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USERS_PROFILE_KEY;
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_WORKOUT_SECTION;
 
 import android.content.DialogInterface;
@@ -15,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -29,10 +28,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+
+import desno.hackathon.omkar.digiyoga.ModalClass.UserProfile;
 
 
 public class HomePageActivity extends AppCompatActivity {
@@ -52,17 +56,18 @@ public class HomePageActivity extends AppCompatActivity {
 
     Fragment selectorFragment;
 
+
+    //user details
+    UserProfile userProfile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         initializeGoogleSignIn();
 
-//        welcome_text = findViewById(R.id.welcome_text);
-//        email_text = findViewById(R.id.email_text);
-//        logout = findViewById(R.id.logOut_button);
         bottomNavigationView = findViewById(R.id.bottom_navigation_bar);
-
+        updateUI();
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         if (signInAccount != null) {
 //            Toast.makeText(this, "google name : " + signInAccount.getDisplayName(), Toast.LENGTH_SHORT).show();
@@ -70,15 +75,9 @@ public class HomePageActivity extends AppCompatActivity {
 //            email_text.setText("email :" + signInAccount.getEmail());
         }
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commitNow();
+
         bottomNavigationView.setSelectedItemId(R.id.Home);
-//
-//        logout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                signOut();
-//            }
-//        });
+
 
         setData();
 
@@ -97,7 +96,7 @@ public class HomePageActivity extends AppCompatActivity {
                         break;
 
                     case R.id.Home:
-                        selectorFragment = new HomeFragment();
+                        selectorFragment = new HomeFragment(userProfile.getUSER_Display_Name(), "deeemo");
                         break;
 
                     case R.id.Plan:
@@ -124,26 +123,15 @@ public class HomePageActivity extends AppCompatActivity {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(YOGA_WORKOUT_SECTION);
 
         HashMap<String, String> yogaPlan = new HashMap<>();
-        HashMap<String, String> yogaPlan1 = new HashMap<>();
-        HashMap<String, String> yogaPlan2 = new HashMap<>();
 
-        yogaPlan.put(YOGA_PLAN_NAME, "demo plan name");
-        yogaPlan.put(YOGA_PLAN_DESCRIPTION, "demo description");
-        yogaPlan.put(YOGA_PLAN_ESTIMATED_DAYS, "demo duration");
-        yogaPlan.put(YOGA_PLAN_IMAGE_URL, "null");
-
-
-        yogaPlan1.put(YOGA_PLAN_NAME, "demo plan name2");
-        yogaPlan1.put(YOGA_PLAN_DESCRIPTION, "demo description2");
-        yogaPlan1.put(YOGA_PLAN_ESTIMATED_DAYS, "demo duration2");
-        yogaPlan1.put(YOGA_PLAN_IMAGE_URL, "null2");
-
-
-//        databaseReference.setValue(yogaPlan);
-        databaseReference.child("1").setValue(yogaPlan1);
-        databaseReference.child("2").setValue(yogaPlan1);
-        databaseReference.child("3").setValue(yogaPlan1);
-
+//        yogaPlan.put(YOGA_PLAN_NAME, "demo plan name2");
+//        yogaPlan.put(YOGA_PLAN_DESCRIPTION, "demo description2");
+//        yogaPlan.put(YOGA_PLAN_ESTIMATED_DAYS, "demo duration2");
+//        yogaPlan.put(YOGA_PLAN_IMAGE_URL, "null2");
+        yogaPlan.put("quote", "hell quote");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child(HOMEPAGE_YOGA_QUOTE);
+//        String id = databaseReference.push().getKey();
+        databaseReference.setValue("this is demo quote");
     }
 
 
@@ -214,4 +202,25 @@ public class HomePageActivity extends AppCompatActivity {
 
     }
 
+    public void updateUI() {
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        final String[] Quote = new String[1];
+
+        FirebaseDatabase.getInstance().getReference().child(USERS_PROFILE_KEY).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userProfile = snapshot.getValue(UserProfile.class);
+                Toast.makeText(HomePageActivity.this, userProfile.getUSER_Email(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        Toast.makeText(this, Quote[0] + user.getUid(), Toast.LENGTH_SHORT).show();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment(user.getDisplayName(), Quote[0])).commitNow();
+    }
 }

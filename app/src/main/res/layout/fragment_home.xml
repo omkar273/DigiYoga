@@ -104,7 +104,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_7sdp" />
 
-                <include layout="@layout/yoga_workout_plan_recycler_layout" />
             </LinearLayout>
         </ScrollView>
 

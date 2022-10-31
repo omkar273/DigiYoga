@@ -37,5 +37,13 @@ public class Constants {
     //yoga types
     public static final String YOGA_TYPE_NAME = "Beginner_Yoga_Plan";
 
+    //Yoga Homepage Quote
+    public static final String YOGA_QUOTE_NAME = "Yoga Quotes";
+
+
+    //keys for fetching data in home fragment
+    public static final String USER_DISPLAY_NAME_KEY = "UserName";
+    public static final String HOMEPAGE_YOGA_QUOTE = "YogaQuote";
+
 
 }
