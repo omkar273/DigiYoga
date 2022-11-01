@@ -124,13 +124,14 @@
 
                             <TextView
                                 android:id="@+id/user_email_id"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_15sdp"
                                 android:drawableStart="@drawable/email_icon"
                                 android:drawableTint="@color/black"
                                 android:fontFamily="@font/alegreya_regular"
-                                android:gravity="center"
+                                android:gravity="top"
+                                android:maxLines="2"
                                 android:text="  test@gmail.com"
                                 android:textSize="@dimen/_16sdp"
                                 app:layout_constraintEnd_toEndOf="parent"

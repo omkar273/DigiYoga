@@ -1,10 +1,20 @@
 package desno.hackathon.omkar.digiyoga;
 
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.GOOGLE_SIGN_IN_REQUEST_CODE;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USERS_DETAILS_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PASSWORD_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_DISPLAY_NAME_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_DOB_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_EMAIL_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_IMAGE_URL_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_PHONE_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_UID_KEY;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -13,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -27,11 +38,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 
 public class SplashActivity extends AppCompatActivity {
@@ -49,6 +66,7 @@ public class SplashActivity extends AppCompatActivity {
     GoogleSignInOptions gso;
     GoogleSignInAccount signInAccount;
 
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +86,7 @@ public class SplashActivity extends AppCompatActivity {
 
         Animation zoomOut = AnimationUtils.loadAnimation(this, R.anim.splash_logo_animation);
 
-
+        progressDialog = new ProgressDialog(this);
         //zoom animation for
         logo.startAnimation(zoomOut);
         app_name.startAnimation(zoomOut);
@@ -147,26 +165,80 @@ public class SplashActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE);
 
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
-        if (signInAccount != null) {
-            Toast.makeText(this, "google name : " + signInAccount.getDisplayName(), Toast.LENGTH_SHORT).show();
-        }
 
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == GOOGLE_SIGN_IN_REQUEST_CODE) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-
+            Log.d("google1", "onActivityResult: got in");
             try {
                 task.getResult(ApiException.class);
-                Toast.makeText(this, "logged in sucessfully", Toast.LENGTH_SHORT).show();
+                signInAccount = task.getResult();
+                Log.d("google1", "onActivityResult: task completed sucessfully" + signInAccount.getDisplayName());
 
-                navigateToNextActivity();
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(signInAccount.getEmail(), signInAccount.getId()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                            progressDialog.setMessage("Please wait...");
+                            progressDialog.setCanceledOnTouchOutside(false);
+                            progressDialog.show();
+
+
+                            Log.d("google1", "onComplete: Task Sucessfull");
+                            UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(signInAccount.getDisplayName()).build();
+                            FirebaseAuth.getInstance().getCurrentUser().updateProfile(userProfileChangeRequest);
+
+
+                            HashMap<String, String> userProfile = new HashMap<>();
+                            userProfile.put(USER_UID_KEY, FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            userProfile.put(USER_PROFILE_DISPLAY_NAME_KEY, signInAccount.getDisplayName());
+                            userProfile.put(USER_PROFILE_PHONE_KEY, "Not Updated");
+                            userProfile.put(USER_PROFILE_EMAIL_KEY, signInAccount.getEmail());
+                            userProfile.put(USER_PROFILE_DOB_KEY, "Not updated");
+                            userProfile.put(USER_PASSWORD_KEY, signInAccount.getId());
+                            userProfile.put(USER_PROFILE_IMAGE_URL_KEY, "null");
+
+                            FirebaseDatabase.getInstance().getReference().child(USERS_DETAILS_KEY).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+
+                                    if (task.isSuccessful()) {
+                                        Log.d("google1", "Data entered");
+
+                                        gsc.signOut();
+                                        Toast.makeText(SplashActivity.this, "logged in sucessfully ", Toast.LENGTH_SHORT).show();
+                                        progressDialog.dismiss();
+                                        navigateToNextActivity();
+                                    } else {
+                                        Log.d("google1", "onComplete: Couldnt enter data in database refernce");
+                                    }
+
+                                }
+                            });
+
+
+                        } else {
+                            Log.d("google1", "onComplete: Couldnt create user in authentification");
+                            FirebaseAuth.getInstance().signInWithEmailAndPassword(signInAccount.getEmail(), signInAccount.getId()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                @Override
+                                public void onSuccess(AuthResult authResult) {
+                                    Log.d("google1", "onSuccess: sign in sucess");
+                                    gsc.signOut();
+                                    Toast.makeText(SplashActivity.this, "logged in sucessfully ", Toast.LENGTH_SHORT).show();
+                                    navigateToNextActivity();
+                                }
+                            });
+                        }
+                    }
+                });
+//                navigateToNextActivity();
             } catch (ApiException e) {
                 e.printStackTrace();
                 Toast.makeText(this, "Some error occured", Toast.LENGTH_SHORT).show();
@@ -175,10 +247,11 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void navigateToNextActivity() {
-        Intent intent = new Intent(this, HomePageActivity.class);
+        Intent intent = new Intent(SplashActivity.this, HomePageActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
+
 
     public void initializeFacebook() {
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {

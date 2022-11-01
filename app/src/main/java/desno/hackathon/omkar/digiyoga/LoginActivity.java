@@ -179,12 +179,16 @@ public class LoginActivity extends AppCompatActivity {
                 task.getResult(ApiException.class);
                 signInAccount = task.getResult();
                 Log.d("google1", "onActivityResult: task completed sucessfully" + signInAccount.getDisplayName());
-                Toast.makeText(this, "logged in sucessfully ", Toast.LENGTH_SHORT).show();
 
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(signInAccount.getEmail(), signInAccount.getId()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
+                            progressDialog.setMessage("Please wait...");
+                            progressDialog.setCanceledOnTouchOutside(false);
+                            progressDialog.show();
+
 
                             Log.d("google1", "onComplete: Task Sucessfull");
                             UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(signInAccount.getDisplayName()).build();
@@ -200,25 +204,23 @@ public class LoginActivity extends AppCompatActivity {
                             userProfile.put(USER_PASSWORD_KEY, signInAccount.getId());
                             userProfile.put(USER_PROFILE_IMAGE_URL_KEY, "null");
 
-                            FirebaseDatabase.getInstance().getReference()
-                                    .child(USERS_DETAILS_KEY)
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .setValue(userProfile)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
+                            FirebaseDatabase.getInstance().getReference().child(USERS_DETAILS_KEY).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
 
-                                            if (task.isSuccessful()) {
-                                                Log.d("google1", "Data entered");
+                                    if (task.isSuccessful()) {
+                                        Log.d("google1", "Data entered");
 
-                                                gsc.signOut();
-                                                navigateToNextActivity();
-                                            } else {
-                                                Log.d("google1", "onComplete: Couldnt enter data in database refernce");
-                                            }
+                                        gsc.signOut();
+                                        Toast.makeText(LoginActivity.this, "logged in sucessfully ", Toast.LENGTH_SHORT).show();
+                                        progressDialog.dismiss();
+                                        navigateToNextActivity();
+                                    } else {
+                                        Log.d("google1", "onComplete: Couldnt enter data in database refernce");
+                                    }
 
-                                        }
-                                    });
+                                }
+                            });
 
 
                         } else {
@@ -228,6 +230,8 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onSuccess(AuthResult authResult) {
                                     Log.d("google1", "onSuccess: sign in sucess");
                                     gsc.signOut();
+                                    Toast.makeText(LoginActivity.this, "logged in sucessfully ", Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
                                     navigateToNextActivity();
                                 }
                             });

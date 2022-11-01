@@ -205,25 +205,25 @@ public class LoginActivity extends AppCompatActivity {
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .setValue(userProfile)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
 
-                                    if (task.isSuccessful()){
-                                        Log.d("google1", "Data entered");
+                                            if (task.isSuccessful()) {
+                                                Log.d("google1", "Data entered");
 
-                                        gsc.signOut();
-                                        navigateToNextActivity();
-                                    }else {
-                                        Log.d("google1", "onComplete: Couldnt enter data in database refernce");
-                                    }
+                                                gsc.signOut();
+                                                navigateToNextActivity();
+                                            } else {
+                                                Log.d("google1", "onComplete: Couldnt enter data in database refernce");
+                                            }
 
-                                }
-                            });
+                                        }
+                                    });
 
 
-                        }else {
+                        } else {
                             Log.d("google1", "onComplete: Couldnt create user in authentification");
-                            FirebaseAuth.getInstance().signInWithEmailAndPassword(signInAccount.getEmail(),signInAccount.getId()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            FirebaseAuth.getInstance().signInWithEmailAndPassword(signInAccount.getEmail(), signInAccount.getId()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
                                     Log.d("google1", "onSuccess: sign in sucess");
