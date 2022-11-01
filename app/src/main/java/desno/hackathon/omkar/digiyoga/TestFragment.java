@@ -20,11 +20,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import desno.hackathon.omkar.digiyoga.ModalClass.UserProfile;
 import desno.hackathon.omkar.digiyoga.ModalClass.YogaWorkoutPlans;
 import desno.hackathon.omkar.digiyoga.YogaWorkoutAdapter.YogaWorkoutAdapter;
 
 public class TestFragment extends Fragment {
-
 
     RecyclerView recyclerView;
     YogaWorkoutAdapter adapter;
@@ -33,6 +33,7 @@ public class TestFragment extends Fragment {
     DatabaseReference databaseReference;
     TextView greeting_text, yoga_quote;
     String userName, Quote;
+    UserProfile userProfile;
 
     public TestFragment() {
         // Required empty public constructor
@@ -44,11 +45,15 @@ public class TestFragment extends Fragment {
         Quote = quote;
     }
 
-    public static TestFragment newInstance(String userName, String quote) {
-        TestFragment fragment = new TestFragment();
+    public TestFragment(UserProfile userProfile) {
+
+    }
+
+    public static HomeFragment newInstance(String userName, String quote) {
+        HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
 
-        args.putString(USER_DISPLAY_NAME_KEY, userName);
+        args.putString(USER_DISPLAY_NAME_KEY, FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         args.putString(HOMEPAGE_YOGA_QUOTE, quote);
         fragment.setArguments(args);
         return fragment;
@@ -69,8 +74,8 @@ public class TestFragment extends Fragment {
         greeting_text = view.findViewById(R.id.greeting_text);
         yoga_quote = view.findViewById(R.id.yoga_quote);
 
-        greeting_text.setText("Welcome " + userName);
-        yoga_quote.setText(Quote);
+        greeting_text.setText("Welcome " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+//        yoga_quote.setText();
 
         FirebaseRecyclerOptions<YogaWorkoutPlans> options = new FirebaseRecyclerOptions.Builder<YogaWorkoutPlans>().setQuery(FirebaseDatabase.getInstance().getReference().child(YOGA_WORKOUT_SECTION), YogaWorkoutPlans.class).build();
 

@@ -2,16 +2,19 @@ package desno.hackathon.omkar.digiyoga;
 
 import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.HOMEPAGE_YOGA_QUOTE;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USERS_DETAILS_KEY;
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_WORKOUT_SECTION;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -22,10 +25,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -41,7 +48,6 @@ public class HomePageActivity extends AppCompatActivity {
     GoogleSignInAccount signInAccount;
     TextView welcome_text, email_text;
 
-
     FirebaseAuth mAuth;
     FirebaseUser user;
     Button logout;
@@ -51,7 +57,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     Fragment selectorFragment;
     //user details
-    UserProfile userProfile;
+    UserProfile userProfile1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +66,13 @@ public class HomePageActivity extends AppCompatActivity {
         initializeGoogleSignIn();
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_bar);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new TestFragment()).commitNow();
+
+        userProfile1 = new UserProfile("uid", "displayname", "phone", "email", "dob", "password", "url");
+
+        getUserProfile();
+
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment(userProfile1)).commitNow();
 
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         if (signInAccount != null) {
@@ -87,7 +99,7 @@ public class HomePageActivity extends AppCompatActivity {
                         break;
 
                     case R.id.Home:
-                        selectorFragment = new TestFragment();
+                        selectorFragment = new HomeFragment(userProfile1);
                         break;
 
                     case R.id.Plan:
@@ -95,7 +107,7 @@ public class HomePageActivity extends AppCompatActivity {
                         break;
 
                     case R.id.profile:
-                        selectorFragment = new ProfileFragment();
+                        selectorFragment = new ProfileFragment(userProfile1);
                         break;
 
                     default:
@@ -192,5 +204,38 @@ public class HomePageActivity extends AppCompatActivity {
         }
 
     }
+
+    public void getUserProfile() {
+
+        final UserProfile[] userProfile = {new UserProfile()};
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(USERS_DETAILS_KEY);
+
+        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (task.getResult().exists()) {
+                        DataSnapshot snapshot = task.getResult();
+
+                        userProfile[0] = snapshot.getValue(UserProfile.class);
+                        userProfile1 = userProfile[0];
+                        Log.d("firebase", "this.userprofile showData: username  " + userProfile1.getUSER_Display_Name());
+                        Log.d("firebase", "onComplete: returning");
+
+                        return;
+                    }
+                } else {
+                    Toast.makeText(HomePageActivity.this, "Some Error occured please restart the application", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
+    }
+
 
 }

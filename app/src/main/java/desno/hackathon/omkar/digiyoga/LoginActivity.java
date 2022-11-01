@@ -152,6 +152,8 @@ public class LoginActivity extends AppCompatActivity {
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         if (signInAccount != null) {
             Toast.makeText(this, "google name : " + signInAccount.getDisplayName(), Toast.LENGTH_SHORT).show();
+
+
         }
 
     }

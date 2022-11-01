@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import desno.hackathon.omkar.digiyoga.ModalClass.UserProfile;
 
@@ -18,6 +20,9 @@ public class ProfileFragment extends Fragment {
     TextView user_display_name, user_mobile_number, user_email_id, user_dob;
     UserProfile userProfile;
 
+    public ProfileFragment(UserProfile userProfile) {
+        this.userProfile = userProfile;
+    }
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -41,6 +46,18 @@ public class ProfileFragment extends Fragment {
         user_email_id = view.findViewById(R.id.user_email_id);
         user_dob = view.findViewById(R.id.user_dob);
 
+
+        user_display_name.setText(userProfile.getUSER_Display_Name());
+        user_mobile_number.setText(" " + userProfile.getUSER_Phone());
+        user_email_id.setText(" " + userProfile.getUSER_Email());
+        user_dob.setText(" " + userProfile.getUSER_Dob());
+
+        if (!userProfile.getUSER_Profile_Image_URl().equals("null")) {
+            Glide.with(profile_image.getContext()).load(userProfile.getUSER_Profile_Image_URl()).into(profile_image);
+        } else {
+//            Toast.makeText(getContext()
+//                    , "Failed to load Image", Toast.LENGTH_SHORT).show();
+        }
         return view;
     }
 
