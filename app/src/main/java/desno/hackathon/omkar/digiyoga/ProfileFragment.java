@@ -35,6 +35,12 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        profile_image = view.findViewById(R.id.profile_image);
+        user_display_name = view.findViewById(R.id.user_display_name);
+        user_mobile_number = view.findViewById(R.id.user_mobile_number);
+        user_email_id = view.findViewById(R.id.user_email_id);
+        user_dob = view.findViewById(R.id.user_dob);
+
         return view;
     }
 

@@ -2,7 +2,6 @@ package desno.hackathon.omkar.digiyoga;
 
 import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.HOMEPAGE_YOGA_QUOTE;
-import static desno.hackathon.omkar.digiyoga.Constants.Constants.USERS_PROFILE_KEY;
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_WORKOUT_SECTION;
 
 import android.content.DialogInterface;
@@ -13,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -28,11 +26,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
@@ -55,8 +50,6 @@ public class HomePageActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
 
     Fragment selectorFragment;
-
-
     //user details
     UserProfile userProfile;
 
@@ -67,7 +60,8 @@ public class HomePageActivity extends AppCompatActivity {
         initializeGoogleSignIn();
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_bar);
-        updateUI();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new TestFragment()).commitNow();
+
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         if (signInAccount != null) {
 //            Toast.makeText(this, "google name : " + signInAccount.getDisplayName(), Toast.LENGTH_SHORT).show();
@@ -77,9 +71,6 @@ public class HomePageActivity extends AppCompatActivity {
 
 
         bottomNavigationView.setSelectedItemId(R.id.Home);
-
-
-        setData();
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -96,7 +87,7 @@ public class HomePageActivity extends AppCompatActivity {
                         break;
 
                     case R.id.Home:
-                        selectorFragment = new HomeFragment(userProfile.getUSER_Display_Name(), "deeemo");
+                        selectorFragment = new TestFragment();
                         break;
 
                     case R.id.Plan:
@@ -202,25 +193,4 @@ public class HomePageActivity extends AppCompatActivity {
 
     }
 
-    public void updateUI() {
-
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        final String[] Quote = new String[1];
-
-        FirebaseDatabase.getInstance().getReference().child(USERS_PROFILE_KEY).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                userProfile = snapshot.getValue(UserProfile.class);
-                Toast.makeText(HomePageActivity.this, userProfile.getUSER_Email(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        Toast.makeText(this, Quote[0] + user.getUid(), Toast.LENGTH_SHORT).show();
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment(user.getDisplayName(), Quote[0])).commitNow();
-    }
 }
