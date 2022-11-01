@@ -86,7 +86,7 @@ public class SplashActivity extends AppCompatActivity {
                 initializeGoogleSignIn();
                 signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
 
-                if (user != null || signInAccount != null) {
+                if (user != null) {
                     startActivity(intent);
                     finish();
                 } else {

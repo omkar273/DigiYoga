@@ -27,8 +27,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 
 public class LoginActivity extends AppCompatActivity {
     String user_password, user_email;
@@ -37,13 +35,11 @@ public class LoginActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     TextView forgot_password;
     ImageView google_authentification, twitter_authentification;
-    FirebaseAuth mAuth;
     GoogleSignInClient gsc;
     GoogleSignInOptions gso;
     GoogleSignInAccount signInAccount;
     FirebaseAuth firebaseAuth;
-    FirebaseUser user;
-    DatabaseReference mRootRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         //firebase initializing
-        mAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
         initializeGoogleSignIn();
 
         login_button.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
             editText_password.setError("Please enter password");
             Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
         } else {
-            mAuth.signInWithEmailAndPassword(user_email, user_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            firebaseAuth.signInWithEmailAndPassword(user_email, user_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
@@ -151,8 +147,6 @@ public class LoginActivity extends AppCompatActivity {
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         if (signInAccount != null) {
             Toast.makeText(this, "google name : " + signInAccount.getDisplayName(), Toast.LENGTH_SHORT).show();
-
-
         }
 
     }
@@ -169,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this, "logged in sucessfully", Toast.LENGTH_SHORT).show();
 
 
-                navigateToNextActivity();
+//                navigateToNextActivity();
             } catch (ApiException e) {
                 e.printStackTrace();
                 Toast.makeText(this, "Some error occured", Toast.LENGTH_SHORT).show();
