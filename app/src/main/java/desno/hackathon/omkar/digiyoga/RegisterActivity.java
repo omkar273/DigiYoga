@@ -1,7 +1,7 @@
 package desno.hackathon.omkar.digiyoga;
 
 import static android.content.ContentValues.TAG;
-import static desno.hackathon.omkar.digiyoga.Constants.Constants.USERS_PROFILE_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USERS_DETAILS_KEY;
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PASSWORD_KEY;
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_DISPLAY_NAME_KEY;
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_DOB_KEY;
@@ -173,7 +173,7 @@ public class RegisterActivity extends AppCompatActivity {
         userProfile.put(USER_PROFILE_IMAGE_URL_KEY, "null");
 
 
-        mRootRef.child(USERS_PROFILE_KEY).child(firebaseAuth.getCurrentUser().getUid()).setValue(userProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mRootRef.child(USERS_DETAILS_KEY).child(firebaseAuth.getCurrentUser().getUid()).setValue(userProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
