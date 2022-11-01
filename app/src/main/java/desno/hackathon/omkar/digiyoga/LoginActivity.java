@@ -1,11 +1,20 @@
 package desno.hackathon.omkar.digiyoga;
 
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.GOOGLE_SIGN_IN_REQUEST_CODE;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USERS_DETAILS_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PASSWORD_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_DISPLAY_NAME_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_DOB_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_EMAIL_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_IMAGE_URL_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_PHONE_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_UID_KEY;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,9 +33,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
     String user_password, user_email;
@@ -143,12 +157,15 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent signInIntent = gsc.getSignInIntent();
         startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE);
+        Log.d("google1", "loginUserByGoogle: inside method");
 
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         if (signInAccount != null) {
             Toast.makeText(this, "google name : " + signInAccount.getDisplayName(), Toast.LENGTH_SHORT).show();
+            Log.d("google1", "loginUserByGoogle: google account non null");
+        } else {
+            Log.d("google1", "loginUserByGoogle: google account null");
         }
-
     }
 
     @Override
@@ -157,12 +174,66 @@ public class LoginActivity extends AppCompatActivity {
 
         if (requestCode == GOOGLE_SIGN_IN_REQUEST_CODE) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-
+            Log.d("google1", "onActivityResult: got in");
             try {
                 task.getResult(ApiException.class);
-                Toast.makeText(this, "logged in sucessfully", Toast.LENGTH_SHORT).show();
+                signInAccount = task.getResult();
+                Log.d("google1", "onActivityResult: task completed sucessfully" + signInAccount.getDisplayName());
+                Toast.makeText(this, "logged in sucessfully ", Toast.LENGTH_SHORT).show();
+
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(signInAccount.getEmail(), signInAccount.getId()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                            Log.d("google1", "onComplete: Task Sucessfull");
+                            UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(signInAccount.getDisplayName()).build();
+                            FirebaseAuth.getInstance().getCurrentUser().updateProfile(userProfileChangeRequest);
 
 
+                            HashMap<String, String> userProfile = new HashMap<>();
+                            userProfile.put(USER_UID_KEY, FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            userProfile.put(USER_PROFILE_DISPLAY_NAME_KEY, signInAccount.getDisplayName());
+                            userProfile.put(USER_PROFILE_PHONE_KEY, "Not Updated");
+                            userProfile.put(USER_PROFILE_EMAIL_KEY, signInAccount.getEmail());
+                            userProfile.put(USER_PROFILE_DOB_KEY, "Not updated");
+                            userProfile.put(USER_PASSWORD_KEY, signInAccount.getId());
+                            userProfile.put(USER_PROFILE_IMAGE_URL_KEY, "null");
+
+                            FirebaseDatabase.getInstance().getReference()
+                                    .child(USERS_DETAILS_KEY)
+                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .setValue(userProfile)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                            if (task.isSuccessful()) {
+                                                Log.d("google1", "Data entered");
+
+                                                gsc.signOut();
+                                                navigateToNextActivity();
+                                            } else {
+                                                Log.d("google1", "onComplete: Couldnt enter data in database refernce");
+                                            }
+
+                                        }
+                                    });
+
+
+                        } else {
+                            Log.d("google1", "onComplete: Couldnt create user in authentification");
+                            FirebaseAuth.getInstance().signInWithEmailAndPassword(signInAccount.getEmail(), signInAccount.getId()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                @Override
+                                public void onSuccess(AuthResult authResult) {
+                                    Log.d("google1", "onSuccess: sign in sucess");
+                                    gsc.signOut();
+                                    navigateToNextActivity();
+                                }
+                            });
+                        }
+                    }
+                });
 //                navigateToNextActivity();
             } catch (ApiException e) {
                 e.printStackTrace();
@@ -178,3 +249,4 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 }
+

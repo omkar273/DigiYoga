@@ -97,7 +97,6 @@ public class SplashActivity extends AppCompatActivity {
                     google_authentification.startAnimation(zoomOut);
                     twitter_authentification.startAnimation(zoomOut);
                 }
-
             }
         }, 3000);
 

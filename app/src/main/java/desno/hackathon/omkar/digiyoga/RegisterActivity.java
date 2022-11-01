@@ -160,7 +160,6 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(AuthResult authResult) {
                     UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(full_name).build();
-
                     firebaseAuth.getCurrentUser().updateProfile(userProfileChangeRequest);
                 }
             });
