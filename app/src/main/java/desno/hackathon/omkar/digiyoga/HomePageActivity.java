@@ -1,9 +1,7 @@
 package desno.hackathon.omkar.digiyoga;
 
 import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
-import static desno.hackathon.omkar.digiyoga.Constants.Constants.HOMEPAGE_YOGA_QUOTE;
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.USERS_DETAILS_KEY;
-import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_WORKOUT_SECTION;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,8 +30,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.HashMap;
 
 import desno.hackathon.omkar.digiyoga.ModalClass.UserProfile;
 
@@ -95,7 +91,8 @@ public class HomePageActivity extends AppCompatActivity {
                         break;
 
                     case R.id.profile:
-                        selectorFragment = new ProfileFragment(userProfile1);
+                        selectorFragment = new TestFragment(userProfile1);
+//                        selectorFragment = new ProfileFragment(userProfile1);
                         break;
 
                     default:
@@ -111,18 +108,18 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     private void setData() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(YOGA_WORKOUT_SECTION);
+//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(YOGA_WORKOUT_SECTION);
 
-        HashMap<String, String> yogaPlan = new HashMap<>();
+//        HashMap<String, String> yogaPlan = new HashMap<>();
 
 //        yogaPlan.put(YOGA_PLAN_NAME, "demo plan name2");
 //        yogaPlan.put(YOGA_PLAN_DESCRIPTION, "demo description2");
 //        yogaPlan.put(YOGA_PLAN_ESTIMATED_DAYS, "demo duration2");
 //        yogaPlan.put(YOGA_PLAN_IMAGE_URL, "null2");
-        yogaPlan.put("quote", "hell quote");
-        databaseReference = FirebaseDatabase.getInstance().getReference().child(HOMEPAGE_YOGA_QUOTE);
+//        yogaPlan.put("quote", "hell quote");
+//        databaseReference = FirebaseDatabase.getInstance().getReference().child(HOMEPAGE_YOGA_QUOTE);
 //        String id = databaseReference.push().getKey();
-        databaseReference.setValue("this is demo quote");
+//        databaseReference.setValue("this is demo quote");
     }
 
     public void signOut() {

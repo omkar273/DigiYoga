@@ -47,6 +47,21 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
+
+                <TextView
+                    android:id="@+id/edit_profile_pic"
+                    android:layout_width="159dp"
+                    android:layout_height="28dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/rectangle_with_border1"
+                    android:fontFamily="@font/alegreya_regular"
+                    android:gravity="center"
+                    android:text="Edit Profile Pic"
+                    android:textSize="@dimen/_16sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView"
                     android:layout_width="match_parent"
@@ -58,9 +73,9 @@
                     app:cardCornerRadius="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.571"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_image"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_profile_pic"
                     app:layout_constraintVertical_bias="0.0">
 
                     <LinearLayout
@@ -122,8 +137,7 @@
                             android:layout_marginLeft="10sp"
                             android:layout_marginRight="10sp"
                             android:layout_marginBottom="@dimen/_15sdp"
-                            android:clickable="false"
-                            android:hint="@string/dob">
+                            android:clickable="false">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/tie_dob"
@@ -133,26 +147,6 @@
                                 app:drawableLeftCompat="@drawable/cake_icon"
                                 app:drawableStartCompat="@drawable/cake_icon" />
                         </com.google.android.material.textfield.TextInputLayout>
-
-                        <!--                        <com.google.android.material.textfield.TextInputLayout-->
-                        <!--                            android:id="@+id/til_login_email"-->
-                        <!--                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-                        <!--                            android:layout_width="match_parent"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:layout_marginLeft="10sp"-->
-                        <!--                            android:layout_marginRight="10sp"-->
-                        <!--                            android:layout_marginBottom="@dimen/_15sdp"-->
-                        <!--                            android:clickable="false"-->
-                        <!--                            android:hint="@string/email">-->
-
-                        <!--                            <com.google.android.material.textfield.TextInputEditText-->
-                        <!--                                android:id="@+id/tie_login_email"-->
-                        <!--                                style="@style/lrf_input_edit_text_style"-->
-                        <!--                                android:drawableTint="#403D3D"-->
-                        <!--                                android:inputType="textEmailAddress"-->
-                        <!--                                app:drawableLeftCompat="@drawable/email_icon"-->
-                        <!--                                app:drawableStartCompat="@drawable/email_icon" />-->
-                        <!--                        </com.google.android.material.textfield.TextInputLayout>-->
 
 
                         <Button

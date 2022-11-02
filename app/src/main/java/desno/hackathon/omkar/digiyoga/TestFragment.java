@@ -1,101 +1,86 @@
 package desno.hackathon.omkar.digiyoga;
 
-import static desno.hackathon.omkar.digiyoga.Constants.Constants.HOMEPAGE_YOGA_QUOTE;
-import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_DISPLAY_NAME_KEY;
-import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_WORKOUT_SECTION;
-
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import desno.hackathon.omkar.digiyoga.ModalClass.UserProfile;
-import desno.hackathon.omkar.digiyoga.ModalClass.YogaWorkoutPlans;
-import desno.hackathon.omkar.digiyoga.YogaWorkoutAdapter.YogaWorkoutAdapter;
 
 public class TestFragment extends Fragment {
 
-    RecyclerView recyclerView;
-    YogaWorkoutAdapter adapter;
+    CircleImageView profile_image;
+    TextView user_display_name, user_mobile_number, user_email_id, user_dob;
+    UserProfile userProfile;
+
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
-    DatabaseReference databaseReference;
-    TextView greeting_text, yoga_quote;
-    String userName, Quote;
-    UserProfile userProfile;
+    DatabaseReference reference;
+
+
+    public TestFragment(UserProfile userProfile) {
+        this.userProfile = userProfile;
+    }
 
     public TestFragment() {
         // Required empty public constructor
-
     }
 
-    public TestFragment(String userName, String quote) {
-        this.userName = userName;
-        Quote = quote;
-    }
-
-    public TestFragment(UserProfile userProfile) {
-
-    }
-
-    public static HomeFragment newInstance(String userName, String quote) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-
-        args.putString(USER_DISPLAY_NAME_KEY, FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-        args.putString(HOMEPAGE_YOGA_QUOTE, quote);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        firebaseAuth = FirebaseAuth.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference();
+        user = firebaseAuth.getCurrentUser();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_test, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        recyclerView = view.findViewById(R.id.yoga_workout_recyclerview);
-        greeting_text = view.findViewById(R.id.greeting_text);
-        yoga_quote = view.findViewById(R.id.yoga_quote);
-
-        greeting_text.setText("Welcome " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-//        yoga_quote.setText();
-
-        FirebaseRecyclerOptions<YogaWorkoutPlans> options = new FirebaseRecyclerOptions.Builder<YogaWorkoutPlans>().setQuery(FirebaseDatabase.getInstance().getReference().child(YOGA_WORKOUT_SECTION), YogaWorkoutPlans.class).build();
+        profile_image = view.findViewById(R.id.profile_image);
+        user_display_name = view.findViewById(R.id.user_display_name);
+        user_mobile_number = view.findViewById(R.id.user_mobile_number);
+        user_email_id = view.findViewById(R.id.user_email_id);
+        user_dob = view.findViewById(R.id.user_dob);
 
 
-        adapter = new YogaWorkoutAdapter(options);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(adapter);
+        user_display_name.setText(userProfile.getUSER_Display_Name());
+        user_mobile_number.setText(" " + userProfile.getUSER_Phone());
+        user_email_id.setText(" " + userProfile.getUSER_Email());
+        user_dob.setText(" " + userProfile.getUSER_Dob());
+
+        if (!userProfile.getUSER_Profile_Image_URl().equals("null")) {
+            Glide.with(profile_image.getContext()).load(userProfile.getUSER_Profile_Image_URl()).into(profile_image);
+        } else {
+//            Toast.makeText(getContext()
+//                    , "Failed to load Image", Toast.LENGTH_SHORT).show();
+        }
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
+    public void onclick(View view) {
+        TextView text = (TextView) view;
+        text.setTextColor(getResources().getColor(R.color.white));
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                text.setTextColor(getResources().getColor(R.color.black));
 
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
+            }
+        }, 300);
     }
 }

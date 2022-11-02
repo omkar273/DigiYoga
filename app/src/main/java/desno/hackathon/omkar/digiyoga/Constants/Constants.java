@@ -9,14 +9,12 @@ public class Constants {
 
     // firebase realtime database keys
     public static final String USER_PROFILE_KEY = "USER_Profile";
-    public static final String USERS_DETAILS_KEY = "USERS";
 
     // user profile keys
     public static final String USER_PROFILE_DISPLAY_NAME_KEY = "USER_Display_Name";
     public static final String USER_PROFILE_EMAIL_KEY = "USER_Email";
     public static final String USER_PROFILE_PHONE_KEY = "USER_Phone";
     public static final String USER_PROFILE_DOB_KEY = "USER_Dob";
-    //    public static final String USER_PROFILE_IMAGE_KEY = "USER Profile Image";
     public static final String USER_PROFILE_IMAGE_URL_KEY = "USER_Profile_Image_URl";
 
 
@@ -45,5 +43,8 @@ public class Constants {
     public static final String USER_DISPLAY_NAME_KEY = "UserName";
     public static final String HOMEPAGE_YOGA_QUOTE = "YogaQuote";
 
+    //differencent sections in realtime databases
+    public static final String USERS_DETAILS_KEY = "USERS";
+    public static final String USERS_DP_STORAGE_SECTION_KEY = "User_Profile_pics";
 
 }

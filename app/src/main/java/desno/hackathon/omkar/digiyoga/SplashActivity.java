@@ -14,7 +14,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -181,11 +180,9 @@ public class SplashActivity extends AppCompatActivity {
 
         if (requestCode == GOOGLE_SIGN_IN_REQUEST_CODE) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            Log.d("google1", "onActivityResult: got in");
             try {
                 task.getResult(ApiException.class);
                 signInAccount = task.getResult();
-                Log.d("google1", "onActivityResult: task completed sucessfully" + signInAccount.getDisplayName());
 
                 firebaseAuth.createUserWithEmailAndPassword(signInAccount.getEmail(), signInAccount.getId()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -197,7 +194,6 @@ public class SplashActivity extends AppCompatActivity {
                             progressDialog.show();
 
 
-                            Log.d("google1", "onComplete: Task Sucessfull");
                             UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(signInAccount.getDisplayName()).build();
                             user.updateProfile(userProfileChangeRequest);
 
@@ -216,14 +212,12 @@ public class SplashActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
 
                                     if (task.isSuccessful()) {
-                                        Log.d("google1", "Data entered");
 
                                         gsc.signOut();
                                         Toast.makeText(SplashActivity.this, "logged in sucessfully ", Toast.LENGTH_SHORT).show();
                                         progressDialog.dismiss();
                                         navigateToNextActivity();
                                     } else {
-                                        Log.d("google1", "onComplete: Couldnt enter data in database refernce");
                                     }
 
                                 }
@@ -231,11 +225,9 @@ public class SplashActivity extends AppCompatActivity {
 
 
                         } else {
-                            Log.d("google1", "onComplete: Couldnt create user in authentification");
                             firebaseAuth.signInWithEmailAndPassword(signInAccount.getEmail(), signInAccount.getId()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
-                                    Log.d("google1", "onSuccess: sign in sucess");
                                     gsc.signOut();
                                     Toast.makeText(SplashActivity.this, "logged in sucessfully ", Toast.LENGTH_SHORT).show();
                                     navigateToNextActivity();
