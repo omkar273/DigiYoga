@@ -227,7 +227,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
                             dob.setText(userProfile1.getUSER_Dob());
                         }
                         if (!userProfile1.getUSER_Profile_Image_URl().equals("null")) {
-                            Glide.with(UpdateProfileActivity.this).load(userProfile1.getUSER_Profile_Image_URl()).into(profileImage);
+                            Glide.with(UpdateProfileActivity.this).load(userProfile1.getUSER_Profile_Image_URl()).error(R.drawable.circle_shape
+                            ).into(profileImage);
                         }
                     }
                 } else {

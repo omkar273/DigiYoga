@@ -16,7 +16,6 @@
             android:id="@+id/toolbar_normal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#0D806D"
-            app:titleTextColor="#fff" />
+            android:background="#109F88" />
     </com.google.android.material.appbar.AppBarLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
