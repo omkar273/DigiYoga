@@ -9,10 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +19,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -48,9 +45,9 @@ public class HomePageActivity extends AppCompatActivity {
     GoogleSignInAccount signInAccount;
     TextView welcome_text, email_text;
 
-    FirebaseAuth mAuth;
+    FirebaseAuth firebaseAuth;
     FirebaseUser user;
-    Button logout;
+    DatabaseReference reference;
 
     //bottom navigation bar
     BottomNavigationView bottomNavigationView;
@@ -63,27 +60,18 @@ public class HomePageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
-        initializeGoogleSignIn();
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_bar);
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference();
 
         userProfile1 = new UserProfile("uid", "displayname", "phone", "email", "dob", "password", "url");
-
         getUserProfile();
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment(userProfile1)).commitNow();
-
-        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
-        if (signInAccount != null) {
-//            Toast.makeText(this, "google name : " + signInAccount.getDisplayName(), Toast.LENGTH_SHORT).show();
-//            welcome_text.setText("welcome  " + signInAccount.getDisplayName());
-//            email_text.setText("email :" + signInAccount.getEmail());
-        }
-
-
         bottomNavigationView.setSelectedItemId(R.id.Home);
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment(userProfile1)).commitNow();
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -137,20 +125,11 @@ public class HomePageActivity extends AppCompatActivity {
         databaseReference.setValue("this is demo quote");
     }
 
-
-    private void initializeGoogleSignIn() {
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        gsc = GoogleSignIn.getClient(this, this.gso);
-
-    }
-
     public void signOut() {
-
 
         Intent intent = new Intent(HomePageActivity.this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(FLAG_ACTIVITY_NO_HISTORY);
-
 
         new AlertDialog.Builder(HomePageActivity.this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Logout").setMessage("Are you sure you want to Sign out").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
@@ -205,8 +184,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     }
 
-    public void getUserProfile() {
-
+    public UserProfile getUserProfile() {
         final UserProfile[] userProfile = {new UserProfile()};
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(USERS_DETAILS_KEY);
 
@@ -219,10 +197,6 @@ public class HomePageActivity extends AppCompatActivity {
 
                         userProfile[0] = snapshot.getValue(UserProfile.class);
                         userProfile1 = userProfile[0];
-                        Log.d("firebase", "this.userprofile showData: username  " + userProfile1.getUSER_Display_Name());
-                        Log.d("firebase", "onComplete: returning");
-
-                        return;
                     }
                 } else {
                     Toast.makeText(HomePageActivity.this, "Some Error occured please restart the application", Toast.LENGTH_SHORT).show();
@@ -234,7 +208,7 @@ public class HomePageActivity extends AppCompatActivity {
 
             }
         });
-
+        return userProfile[0];
     }
 
 

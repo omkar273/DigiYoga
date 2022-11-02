@@ -45,6 +45,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
@@ -60,13 +61,16 @@ public class SplashActivity extends AppCompatActivity {
 
     Button login_button, register_button;
     Intent next_activity;
-    FirebaseUser user;
 
     GoogleSignInClient gsc;
     GoogleSignInOptions gso;
     GoogleSignInAccount signInAccount;
 
     ProgressDialog progressDialog;
+
+    FirebaseAuth firebaseAuth;
+    DatabaseReference reference;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +88,8 @@ public class SplashActivity extends AppCompatActivity {
         google_authentification = findViewById(R.id.google_logo);
         twitter_authentification = findViewById(R.id.twitter_logo);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference();
         Animation zoomOut = AnimationUtils.loadAnimation(this, R.anim.splash_logo_animation);
 
         progressDialog = new ProgressDialog(this);
@@ -100,7 +106,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                user = FirebaseAuth.getInstance().getCurrentUser();
+                user = firebaseAuth.getCurrentUser();
                 initializeGoogleSignIn();
                 signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
 
@@ -181,11 +187,11 @@ public class SplashActivity extends AppCompatActivity {
                 signInAccount = task.getResult();
                 Log.d("google1", "onActivityResult: task completed sucessfully" + signInAccount.getDisplayName());
 
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(signInAccount.getEmail(), signInAccount.getId()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                firebaseAuth.createUserWithEmailAndPassword(signInAccount.getEmail(), signInAccount.getId()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
+                            user = FirebaseAuth.getInstance().getCurrentUser();
                             progressDialog.setMessage("Please wait...");
                             progressDialog.setCanceledOnTouchOutside(false);
                             progressDialog.show();
@@ -193,7 +199,7 @@ public class SplashActivity extends AppCompatActivity {
 
                             Log.d("google1", "onComplete: Task Sucessfull");
                             UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(signInAccount.getDisplayName()).build();
-                            FirebaseAuth.getInstance().getCurrentUser().updateProfile(userProfileChangeRequest);
+                            user.updateProfile(userProfileChangeRequest);
 
 
                             HashMap<String, String> userProfile = new HashMap<>();
@@ -205,7 +211,7 @@ public class SplashActivity extends AppCompatActivity {
                             userProfile.put(USER_PASSWORD_KEY, signInAccount.getId());
                             userProfile.put(USER_PROFILE_IMAGE_URL_KEY, "null");
 
-                            FirebaseDatabase.getInstance().getReference().child(USERS_DETAILS_KEY).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            reference.child(USERS_DETAILS_KEY).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
 
@@ -226,7 +232,7 @@ public class SplashActivity extends AppCompatActivity {
 
                         } else {
                             Log.d("google1", "onComplete: Couldnt create user in authentification");
-                            FirebaseAuth.getInstance().signInWithEmailAndPassword(signInAccount.getEmail(), signInAccount.getId()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            firebaseAuth.signInWithEmailAndPassword(signInAccount.getEmail(), signInAccount.getId()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
                                     Log.d("google1", "onSuccess: sign in sucess");
