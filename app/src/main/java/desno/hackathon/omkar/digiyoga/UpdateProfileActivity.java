@@ -5,7 +5,6 @@ import static desno.hackathon.omkar.digiyoga.Constants.Constants.USERS_DETAILS_K
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.USERS_DP_STORAGE_SECTION_KEY;
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_DISPLAY_NAME_KEY;
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_DOB_KEY;
-import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_IMAGE_URL_KEY;
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_PHONE_KEY;
 
 import android.Manifest;
@@ -76,6 +75,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
     String profilePicUrl;
     UserProfile userProfile1;
+    boolean isProifilePicUpdating = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,8 +139,18 @@ public class UpdateProfileActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     Toast.makeText(UpdateProfileActivity.this, uri.toString(), Toast.LENGTH_SHORT).show();
-                                    updateData.put(USER_PROFILE_IMAGE_URL_KEY, uri.toString());
+                                    databaseReference.child(user.getUid()).updateChildren(updateData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(UpdateProfileActivity.this, "Profile updated successfully \nPlease restart the appplication for changes", Toast.LENGTH_LONG).show();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(UpdateProfileActivity.this, "Profile could not be updated", Toast.LENGTH_SHORT).show();
 
+                                        }
+                                    });
                                 }
                             });
                         }
@@ -168,19 +178,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(userName.getText().toString()).build();
                 firebaseAuth.getCurrentUser().updateProfile(userProfileChangeRequest);
 
+                if (!isProifilePicUpdating) {
 
-                databaseReference.child(user.getUid()).updateChildren(updateData).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(UpdateProfileActivity.this, "Profile updated successfully \nPlease restart the appplication for changes", Toast.LENGTH_LONG).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(UpdateProfileActivity.this, "Profile could not be updated", Toast.LENGTH_SHORT).show();
-
-                    }
-                });
+                }
 
             }
         });
@@ -196,7 +196,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(filepath);
                 bitmap = BitmapFactory.decodeStream(inputStream);
                 profileImage.setImageBitmap(bitmap);
-
+                isProifilePicUpdating = true;
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -227,7 +227,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                             dob.setText(userProfile1.getUSER_Dob());
                         }
                         if (!userProfile1.getUSER_Profile_Image_URl().equals("null")) {
-                            Glide.with(UpdateProfileActivity.this).load(userProfile1.getUSER_Profile_Image_URl()).into(profileImage);
+                            Glide.with(UpdateProfileActivity.this).load(userProfile1.getUSER_Profile_Image_URl()).error(R.drawable.circle_shape).into(profileImage);
                         }
                     }
                 } else {
