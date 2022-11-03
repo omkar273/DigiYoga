@@ -18,6 +18,13 @@
         android:theme="@style/Theme.DIGIYoga.noACtionBar"
         tools:targetApi="31">
         <activity
+            android:name=".OtherUserProfileActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".UpdateProfileActivity"
             android:exported="false">
             <meta-data
@@ -27,15 +34,13 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
-
-        <!-- facebook integration -->
-        <!--        <meta-data-->
-        <!--            android:name="com.facebook.sdk.ApplicationId"-->
-        <!--            android:value="@string/facebook_app_id" />-->
-        <!--        <meta-data-->
-        <!--            android:name="com.facebook.sdk.ClientToken"-->
-        <!--            android:value="@string/facebook_client_token" /> &lt;!&ndash; landing activity &ndash;&gt;-->
+            android:value="ca-app-pub-3940256099942544~3347511713" /> <!-- facebook integration -->
+        <!-- <meta-data -->
+        <!-- android:name="com.facebook.sdk.ApplicationId" -->
+        <!-- android:value="@string/facebook_app_id" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="com.facebook.sdk.ClientToken" -->
+        <!-- android:value="@string/facebook_client_token" /> &lt;!&ndash; landing activity &ndash;&gt; -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">

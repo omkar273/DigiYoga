@@ -1,7 +1,5 @@
 package desno.hackathon.omkar.digiyoga;
 
-import static desno.hackathon.omkar.digiyoga.Constants.Constants.HOMEPAGE_YOGA_QUOTE;
-import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_DISPLAY_NAME_KEY;
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_WORKOUT_SECTION;
 
 import android.os.Bundle;
@@ -20,7 +18,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import desno.hackathon.omkar.digiyoga.ModalClass.UserProfile;
 import desno.hackathon.omkar.digiyoga.ModalClass.YogaWorkoutPlans;
 import desno.hackathon.omkar.digiyoga.YogaWorkoutAdapter.YogaWorkoutAdapter;
 
@@ -28,12 +25,13 @@ public class HomeFragment extends Fragment {
 
     RecyclerView recyclerView;
     YogaWorkoutAdapter adapter;
-    FirebaseAuth firebaseAuth;
-    FirebaseUser user;
-    DatabaseReference databaseReference;
+
     TextView greeting_text, yoga_quote;
     String userName, Quote;
-    UserProfile userProfile;
+
+    FirebaseAuth firebaseAuth;
+    DatabaseReference databaseReference;
+    FirebaseUser user;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -45,24 +43,12 @@ public class HomeFragment extends Fragment {
         Quote = quote;
     }
 
-    public HomeFragment(UserProfile userProfile) {
-
-    }
-
-    public static HomeFragment newInstance(String userName, String quote) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-
-        args.putString(USER_DISPLAY_NAME_KEY, FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-        args.putString(HOMEPAGE_YOGA_QUOTE, quote);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        firebaseAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        user = firebaseAuth.getCurrentUser();
     }
 
     @Override
@@ -74,10 +60,10 @@ public class HomeFragment extends Fragment {
         greeting_text = view.findViewById(R.id.greeting_text);
         yoga_quote = view.findViewById(R.id.yoga_quote);
 
-        greeting_text.setText("Welcome " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        greeting_text.setText("Welcome " + user.getDisplayName());
 //        yoga_quote.setText();
 
-        FirebaseRecyclerOptions<YogaWorkoutPlans> options = new FirebaseRecyclerOptions.Builder<YogaWorkoutPlans>().setQuery(FirebaseDatabase.getInstance().getReference().child(YOGA_WORKOUT_SECTION), YogaWorkoutPlans.class).build();
+        FirebaseRecyclerOptions<YogaWorkoutPlans> options = new FirebaseRecyclerOptions.Builder<YogaWorkoutPlans>().setQuery(databaseReference.child(YOGA_WORKOUT_SECTION), YogaWorkoutPlans.class).build();
 
 
         adapter = new YogaWorkoutAdapter(options);

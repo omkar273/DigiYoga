@@ -19,12 +19,6 @@ import desno.hackathon.omkar.digiyoga.R;
 public class YogaWorkoutAdapter extends FirebaseRecyclerAdapter<YogaWorkoutPlans, YogaWorkoutAdapter.myViewHolder> {
 
 
-    /**
-     * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
-     * {@link FirebaseRecyclerOptions} for configuration options.
-     *
-     * @param options
-     */
     public YogaWorkoutAdapter(@NonNull FirebaseRecyclerOptions<YogaWorkoutPlans> options) {
         super(options);
     }

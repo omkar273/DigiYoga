@@ -67,7 +67,7 @@ public class HomePageActivity extends AppCompatActivity {
 
 
         bottomNavigationView.setSelectedItemId(R.id.Home);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment(userProfile1)).commitNow();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commitNow();
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -83,7 +83,7 @@ public class HomePageActivity extends AppCompatActivity {
                         break;
 
                     case R.id.Home:
-                        selectorFragment = new HomeFragment(userProfile1);
+                        selectorFragment = new HomeFragment();
                         break;
 
                     case R.id.Plan:
