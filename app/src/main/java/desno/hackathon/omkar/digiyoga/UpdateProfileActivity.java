@@ -58,7 +58,7 @@ import desno.hackathon.omkar.digiyoga.ModalClass.UserProfile;
 public class UpdateProfileActivity extends AppCompatActivity {
 
 
-    ImageView profileImage;
+    ImageView profileImage, cancel_button;
     EditText userName, dob, mobile;
 
     DatabaseReference databaseReference;
@@ -71,11 +71,13 @@ public class UpdateProfileActivity extends AppCompatActivity {
     Bitmap bitmap;
 
     Button Update_button;
-    TextView edit_profile_pic;
+    TextView edit_profile_pic, save_button;
     ProgressDialog progressDialog;
 
     String profilePicUrl;
     UserProfile userProfile1;
+
+    boolean isPicUpdated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
         profileImage = findViewById(R.id.profile_image);
         Update_button = findViewById(R.id.Update_button);
         edit_profile_pic = findViewById(R.id.edit_profile_pic);
+        edit_profile_pic = findViewById(R.id.edit_profile_pic);
+        save_button = findViewById(R.id.save_button);
+        cancel_button = findViewById(R.id.cancel_button);
 
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
@@ -96,7 +101,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
         Uid = user.getUid();
 
         userProfile1 = getUserProfile();
-
 
         progressDialog = new ProgressDialog(this);
         edit_profile_pic.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +112,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
                         Intent intent = new Intent().setType("image/*").setAction(Intent.ACTION_GET_CONTENT);
                         startActivityForResult(intent, PROFILE_IMAGE_UPDATE_REQUEST_CODE);
+                        isPicUpdated = true;
                     }
 
                     @Override
@@ -122,66 +127,24 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 }).check();
             }
         });
-        Map<String, Object> updateData = new HashMap<>();
 
+        cancel_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         Update_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (filepath != null) {
+                saveData();
+            }
+        });
 
-                    StorageReference uploader = storageReference.child(user.getUid() + ".png");
-                    uploader.putFile(filepath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
-
-                            uploader.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    Toast.makeText(UpdateProfileActivity.this, uri.toString(), Toast.LENGTH_SHORT).show();
-                                    updateData.put(USER_PROFILE_IMAGE_URL_KEY, uri.toString());
-
-                                }
-                            });
-                        }
-                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                            float percentage = (snapshot.getBytesTransferred() * 100) / snapshot.getTotalByteCount();
-                            progressDialog.setMessage("uploading " + percentage + " %");
-                            progressDialog.setCanceledOnTouchOutside(false);
-                            progressDialog.show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            Toast.makeText(UpdateProfileActivity.this, "profile pic update failed", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-
-                updateData.put(USER_PROFILE_DISPLAY_NAME_KEY, userName.getText().toString());
-                updateData.put(USER_PROFILE_PHONE_KEY, mobile.getText().toString());
-                updateData.put(USER_PROFILE_DOB_KEY, dob.getText().toString());
-
-                UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(userName.getText().toString()).build();
-                firebaseAuth.getCurrentUser().updateProfile(userProfileChangeRequest);
-
-
-                databaseReference.child(user.getUid()).updateChildren(updateData).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(UpdateProfileActivity.this, "Profile updated successfully \nPlease restart the appplication for changes", Toast.LENGTH_LONG).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(UpdateProfileActivity.this, "Profile could not be updated", Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-
+        save_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveData();
             }
         });
     }
@@ -241,6 +204,86 @@ public class UpdateProfileActivity extends AppCompatActivity {
             }
         });
         return userProfile[0];
+    }
+
+    public void saveData() {
+        Map<String, Object> updateData = new HashMap<>();
+
+        if (filepath != null) {
+
+            StorageReference uploader = storageReference.child(user.getUid() + ".png");
+            uploader.putFile(filepath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    progressDialog.dismiss();
+
+                    uploader.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            updateData.put(USER_PROFILE_IMAGE_URL_KEY, uri.toString());
+
+
+                            updateData.put(USER_PROFILE_DISPLAY_NAME_KEY, userName.getText().toString());
+                            updateData.put(USER_PROFILE_PHONE_KEY, mobile.getText().toString());
+                            updateData.put(USER_PROFILE_DOB_KEY, dob.getText().toString());
+
+                            UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(userName.getText().toString()).build();
+                            firebaseAuth.getCurrentUser().updateProfile(userProfileChangeRequest);
+
+
+                            databaseReference.child(user.getUid()).updateChildren(updateData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toast.makeText(UpdateProfileActivity.this, "Profile updated successfully \nPlease restart the appplication for changes", Toast.LENGTH_LONG).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(UpdateProfileActivity.this, "Profile could not be updated", Toast.LENGTH_SHORT).show();
+
+                                }
+                            });
+
+                        }
+                    });
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                    float percentage = (snapshot.getBytesTransferred() * 100) / snapshot.getTotalByteCount();
+                    progressDialog.setMessage("uploading " + percentage + " %");
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    progressDialog.dismiss();
+                    Toast.makeText(UpdateProfileActivity.this, "profile pic update failed", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        if (!isPicUpdated) {
+            updateData.put(USER_PROFILE_DISPLAY_NAME_KEY, userName.getText().toString());
+            updateData.put(USER_PROFILE_PHONE_KEY, mobile.getText().toString());
+            updateData.put(USER_PROFILE_DOB_KEY, dob.getText().toString());
+            UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(userName.getText().toString()).build();
+            firebaseAuth.getCurrentUser().updateProfile(userProfileChangeRequest);
+            databaseReference.child(user.getUid()).updateChildren(updateData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    Toast.makeText(UpdateProfileActivity.this, "Profile updated successfully \nPlease restart the appplication for changes", Toast.LENGTH_LONG).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(UpdateProfileActivity.this, "Profile could not be updated", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+        }
     }
 
 }

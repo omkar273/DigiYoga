@@ -28,6 +28,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     DatabaseReference reference;
     FirebaseUser user;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
