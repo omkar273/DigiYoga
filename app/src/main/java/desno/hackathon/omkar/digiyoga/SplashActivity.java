@@ -89,6 +89,8 @@ public class SplashActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         reference = FirebaseDatabase.getInstance().getReference();
+        user = firebaseAuth.getCurrentUser();
+
         Animation zoomOut = AnimationUtils.loadAnimation(this, R.anim.splash_logo_animation);
 
         progressDialog = new ProgressDialog(this);
@@ -105,7 +107,6 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                user = firebaseAuth.getCurrentUser();
                 initializeGoogleSignIn();
                 signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
 

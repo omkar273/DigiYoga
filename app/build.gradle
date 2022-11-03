@@ -75,6 +75,5 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-storage:8.0.2'
 
     //agora dependencies
-    implementation 'com.github.AgoraIO-Community.VideoUIKit-Android:final:v4.0.1-rc3'
 
 }

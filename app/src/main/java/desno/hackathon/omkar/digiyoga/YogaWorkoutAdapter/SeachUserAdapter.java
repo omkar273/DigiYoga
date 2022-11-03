@@ -1,5 +1,8 @@
 package desno.hackathon.omkar.digiyoga.YogaWorkoutAdapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import desno.hackathon.omkar.digiyoga.ModalClass.UserProfile;
+import desno.hackathon.omkar.digiyoga.OtherUserProfileActivity;
 import desno.hackathon.omkar.digiyoga.R;
 
 public class SeachUserAdapter extends FirebaseRecyclerAdapter<UserProfile, SeachUserAdapter.myViewHolder> {
@@ -36,11 +40,22 @@ public class SeachUserAdapter extends FirebaseRecyclerAdapter<UserProfile, Seach
         holder.user_display_name.setText(model.getUSER_Display_Name());
         Glide.with(holder.profile_image.getContext()).load(model.getUSER_Profile_Image_URl()).error(R.drawable.search_profile_icon).into(holder.profile_image);
 
-        holder.follow_icon.setOnClickListener(new View.OnClickListener() {
+        holder.user_display_name.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 holder.follow_icon.setImageResource(R.drawable.saved_user_icon);
+                gotoUserProfile(model, holder.user_display_name.getContext());
+            }
+        });
+
+
+        holder.profile_image.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                holder.follow_icon.setImageResource(R.drawable.saved_user_icon);
+                gotoUserProfile(model, holder.profile_image.getContext());
             }
         });
     }
@@ -68,5 +83,18 @@ public class SeachUserAdapter extends FirebaseRecyclerAdapter<UserProfile, Seach
         }
     }
 
+    public void gotoUserProfile(UserProfile model, Context context) {
+        Bundle userData = new Bundle();
+
+        userData.putString("name", model.getUSER_Display_Name());
+        userData.putString("email", model.getUSER_Email());
+        userData.putString("email", model.getUSER_Email());
+        userData.putString("profileUrl", model.getUSER_Profile_Image_URl());
+
+        Intent intent = new Intent(context, OtherUserProfileActivity.class);
+        intent.putExtras(userData);
+        context.startActivity(intent);
+
+    }
 
 }
