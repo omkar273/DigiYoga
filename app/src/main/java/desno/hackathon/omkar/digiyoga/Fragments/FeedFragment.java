@@ -1,4 +1,4 @@
-package desno.hackathon.omkar.digiyoga;
+package desno.hackathon.omkar.digiyoga.Fragments;
 
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.USERS_DETAILS_KEY;
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_DISPLAY_NAME_KEY;
@@ -20,7 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import desno.hackathon.omkar.digiyoga.ModalClass.UserProfile;
-import desno.hackathon.omkar.digiyoga.YogaWorkoutAdapter.SeachUserAdapter;
+import desno.hackathon.omkar.digiyoga.R;
+import desno.hackathon.omkar.digiyoga.YogaWorkoutAdapter.SearchUserAdapter;
 
 public class FeedFragment extends Fragment {
 
@@ -31,7 +32,7 @@ public class FeedFragment extends Fragment {
     DatabaseReference databaseReference;
     FirebaseUser user;
 
-    SeachUserAdapter adapter;
+    SearchUserAdapter adapter;
 
     public FeedFragment() {
         // Required empty public constructor
@@ -58,7 +59,7 @@ public class FeedFragment extends Fragment {
         FirebaseRecyclerOptions<UserProfile> options = new FirebaseRecyclerOptions.Builder<UserProfile>().setQuery(databaseReference.child(USERS_DETAILS_KEY).orderByChild(USER_PROFILE_DISPLAY_NAME_KEY), UserProfile.class).build();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new SeachUserAdapter(options);
+        adapter = new SearchUserAdapter(options);
         adapter.startListening();
         recyclerView.setAdapter(adapter);
         recyclerView.setVisibility(View.GONE);
@@ -88,14 +89,17 @@ public class FeedFragment extends Fragment {
         query = query.toUpperCase();
         FirebaseRecyclerOptions<UserProfile> options = new FirebaseRecyclerOptions.Builder<UserProfile>().setQuery(databaseReference.child(USERS_DETAILS_KEY).orderByChild(USER_PROFILE_DISPLAY_NAME_KEY).startAt(query).endAt(query + "\uf8ff"), UserProfile.class).build();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new SeachUserAdapter(options);
+        adapter = new SearchUserAdapter(options);
         adapter.startListening();
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        adapter.notifyDataSetChanged();
         adapter.startListening();
     }
 
@@ -103,6 +107,7 @@ public class FeedFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+        adapter.notifyDataSetChanged();
         adapter.stopListening();
     }
 

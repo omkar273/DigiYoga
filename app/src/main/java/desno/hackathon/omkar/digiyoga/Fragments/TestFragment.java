@@ -1,4 +1,4 @@
-package desno.hackathon.omkar.digiyoga;
+package desno.hackathon.omkar.digiyoga.Fragments;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,21 +10,31 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import desno.hackathon.omkar.digiyoga.ModalClass.UserProfile;
+import desno.hackathon.omkar.digiyoga.R;
 
-public class ProfileFragment extends Fragment {
+public class TestFragment extends Fragment {
 
     CircleImageView profile_image;
     TextView user_display_name, user_mobile_number, user_email_id, user_dob;
     UserProfile userProfile;
 
-    public ProfileFragment(UserProfile userProfile) {
+    FirebaseAuth firebaseAuth;
+    FirebaseUser user;
+    DatabaseReference reference;
+
+
+    public TestFragment(UserProfile userProfile) {
         this.userProfile = userProfile;
     }
 
-    public ProfileFragment() {
+    public TestFragment() {
         // Required empty public constructor
     }
 
@@ -32,7 +42,9 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        firebaseAuth = FirebaseAuth.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference();
+        user = firebaseAuth.getCurrentUser();
     }
 
     @Override
@@ -72,6 +84,4 @@ public class ProfileFragment extends Fragment {
             }
         }, 300);
     }
-
-
 }

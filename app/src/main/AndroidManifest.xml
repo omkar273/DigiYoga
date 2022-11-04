@@ -18,6 +18,13 @@
         android:theme="@style/Theme.DIGIYoga.noACtionBar"
         tools:targetApi="31">
         <activity
+            android:name=".SavedUsersActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".OtherUserProfileActivity"
             android:exported="false">
             <meta-data

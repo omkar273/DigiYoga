@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FeedFragment">
+    tools:context=".Fragments.FeedFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                     android:layout_height="match_parent"
                     android:animateLayoutChanges="true"
                     android:background="@drawable/transparent_edittext"
-                    app:defaultQueryHint="Search"
+                    app:defaultQueryHint="Search users here..."
                     app:goIcon="@drawable/search_icon_bottom_nav"
                     app:iconifiedByDefault="false" />
 

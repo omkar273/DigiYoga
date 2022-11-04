@@ -38,6 +38,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import desno.hackathon.omkar.digiyoga.Fragments.FeedFragment;
+import desno.hackathon.omkar.digiyoga.Fragments.HomeFragment;
+import desno.hackathon.omkar.digiyoga.Fragments.PlanFragment;
+import desno.hackathon.omkar.digiyoga.Fragments.ProgressFragment;
+import desno.hackathon.omkar.digiyoga.Fragments.TestFragment;
 import desno.hackathon.omkar.digiyoga.ModalClass.UserProfile;
 
 

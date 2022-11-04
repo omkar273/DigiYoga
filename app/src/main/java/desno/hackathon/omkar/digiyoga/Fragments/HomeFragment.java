@@ -1,7 +1,8 @@
-package desno.hackathon.omkar.digiyoga;
+package desno.hackathon.omkar.digiyoga.Fragments;
 
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.YOGA_WORKOUT_SECTION;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import desno.hackathon.omkar.digiyoga.ModalClass.YogaWorkoutPlans;
+import desno.hackathon.omkar.digiyoga.R;
+import desno.hackathon.omkar.digiyoga.SavedUsersActivity;
 import desno.hackathon.omkar.digiyoga.YogaWorkoutAdapter.YogaWorkoutAdapter;
 
 public class HomeFragment extends Fragment {
@@ -69,12 +72,21 @@ public class HomeFragment extends Fragment {
         adapter = new YogaWorkoutAdapter(options);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+
+        view.findViewById(R.id.saved_user_icon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), SavedUsersActivity.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        adapter.notifyDataSetChanged();
         adapter.startListening();
     }
 
@@ -82,6 +94,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+        adapter.notifyDataSetChanged();
         adapter.stopListening();
     }
 }

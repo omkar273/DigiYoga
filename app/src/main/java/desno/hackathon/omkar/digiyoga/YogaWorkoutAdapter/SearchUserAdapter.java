@@ -32,11 +32,11 @@ import desno.hackathon.omkar.digiyoga.ModalClass.UserProfile;
 import desno.hackathon.omkar.digiyoga.OtherUserProfileActivity;
 import desno.hackathon.omkar.digiyoga.R;
 
-public class SeachUserAdapter extends FirebaseRecyclerAdapter<UserProfile, SeachUserAdapter.myViewHolder> {
+public class SearchUserAdapter extends FirebaseRecyclerAdapter<UserProfile, SearchUserAdapter.myViewHolder> {
 
     static boolean isUserOwn = false;
 
-    public SeachUserAdapter(@NonNull FirebaseRecyclerOptions<UserProfile> options) {
+    public SearchUserAdapter(@NonNull FirebaseRecyclerOptions<UserProfile> options) {
         super(options);
     }
 
