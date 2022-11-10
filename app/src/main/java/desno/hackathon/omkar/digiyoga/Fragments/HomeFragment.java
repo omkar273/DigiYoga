@@ -66,7 +66,9 @@ public class HomeFragment extends Fragment {
         greeting_text.setText("Welcome " + user.getDisplayName());
 //        yoga_quote.setText();
 
-        FirebaseRecyclerOptions<YogaWorkoutPlans> options = new FirebaseRecyclerOptions.Builder<YogaWorkoutPlans>().setQuery(databaseReference.child(YOGA_WORKOUT_SECTION), YogaWorkoutPlans.class).build();
+        FirebaseRecyclerOptions<YogaWorkoutPlans> options = new FirebaseRecyclerOptions.Builder<YogaWorkoutPlans>()
+                .setQuery(databaseReference.child(YOGA_WORKOUT_SECTION), YogaWorkoutPlans.class)
+                .build();
 
 
         adapter = new YogaWorkoutAdapter(options);

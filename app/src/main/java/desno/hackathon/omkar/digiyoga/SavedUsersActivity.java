@@ -4,36 +4,28 @@ import static desno.hackathon.omkar.digiyoga.Constants.Constants.SAVED_USERS_SEC
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.USERS_DETAILS_KEY;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import desno.hackathon.omkar.digiyoga.ModalClass.SavedUserProfile;
 import desno.hackathon.omkar.digiyoga.ModalClass.UserProfile;
-import desno.hackathon.omkar.digiyoga.YogaWorkoutAdapter.SavedUsersAdapter;
+import desno.hackathon.omkar.digiyoga.YogaWorkoutAdapter.SavedUsersAdapter1;
 
 public class SavedUsersActivity extends AppCompatActivity {
 
-    Toolbar toolbar;
     RecyclerView recyclerView;
-    SavedUsersAdapter adapter;
+    SavedUsersAdapter1 adapter;
     ArrayList<UserProfile> users = new ArrayList<>();
 
     FirebaseAuth firebaseAuth;
@@ -49,72 +41,29 @@ public class SavedUsersActivity extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance().getReference();
         user = firebaseAuth.getCurrentUser();
 
-        FirebaseDatabase.getInstance().getReference(USERS_DETAILS_KEY).child(user.getUid()).child(SAVED_USERS_SECTION_KEY).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                    Toast.makeText(SavedUsersActivity.this, snapshot1.getValue(String.class), Toast.LENGTH_SHORT).show();
-                    Log.w("firebase", "onDataChange: " + snapshot1.getKey());
-
-
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(USERS_DETAILS_KEY);
-                    databaseReference.child(snapshot1.getKey()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                if (task.getResult().exists()) {
-                                    DataSnapshot snapshot = task.getResult();
-
-                                    users.add(snapshot.getValue(UserProfile.class));
-                                }
-                            } else {
-                                Toast.makeText(SavedUsersActivity.this, "Some Error occured please restart the application", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                        }
-                    });
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        users.add(new UserProfile("demo uid", "om", "phone", "email", "dob", "pass", "url"));
-        users.add(new UserProfile("demo uid", "om", "phone", "email", "dob", "pass", "url"));
-        users.add(new UserProfile("demo uid", "om", "phone", "email", "dob", "pass", "url"));
-        users.add(new UserProfile("demo uid", "om", "phone", "email", "dob", "pass", "url"));
         recyclerView = findViewById(R.id.saved_user_recycler_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        Log.d("firebase", "onCreate    ok: ");
-        adapter = new SavedUsersAdapter(users);
+        FirebaseRecyclerOptions<SavedUserProfile> options = new FirebaseRecyclerOptions.Builder<SavedUserProfile>()
+                .setQuery(reference.child(USERS_DETAILS_KEY).child(user.getUid()).child(SAVED_USERS_SECTION_KEY), SavedUserProfile.class)
+                .build();
+
+
+        adapter = new SavedUsersAdapter1(options);
+        recyclerView.setLayoutManager(new GridLayoutManager(this,2));
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         adapter.notifyDataSetChanged();
-
-    }
-
-    public ArrayList<UserProfile> getData() {
-        Log.d("firebase ", "getData: entered in getdata");
-        ArrayList<UserProfile> userList = new ArrayList<>();
-
-
-        return userList;
+        adapter.startListening();
     }
 
 
-    public UserProfile getUserProfile(String uId) {
-
-        Log.d("firebase", "getUserProfile: entered in get user profile" + uId);
-        final UserProfile[] userProfile = {new UserProfile()};
-
-        return userProfile[0];
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.notifyDataSetChanged();
+        adapter.stopListening();
     }
-
 }

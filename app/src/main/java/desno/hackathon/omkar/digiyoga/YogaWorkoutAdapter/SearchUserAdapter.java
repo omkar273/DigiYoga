@@ -2,6 +2,9 @@ package desno.hackathon.omkar.digiyoga.YogaWorkoutAdapter;
 
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.SAVED_USERS_SECTION_KEY;
 import static desno.hackathon.omkar.digiyoga.Constants.Constants.USERS_DETAILS_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_DISPLAY_NAME_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_PROFILE_IMAGE_URL_KEY;
+import static desno.hackathon.omkar.digiyoga.Constants.Constants.USER_UID_KEY;
 
 import android.content.Context;
 import android.content.Intent;
@@ -64,10 +67,12 @@ public class SearchUserAdapter extends FirebaseRecyclerAdapter<UserProfile, Sear
             @Override
             public void onClick(View view) {
 
-
                 Map<String, Object> saved = new HashMap<>();
-                saved.put(model.getUSER_Uid(), model.getUSER_Display_Name());
-                FirebaseDatabase.getInstance().getReference(USERS_DETAILS_KEY).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(SAVED_USERS_SECTION_KEY).updateChildren(saved).addOnSuccessListener(new OnSuccessListener<Void>() {
+                saved.put(USER_PROFILE_DISPLAY_NAME_KEY, model.getUSER_Display_Name());
+                saved.put(USER_PROFILE_IMAGE_URL_KEY, model.getUSER_Profile_Image_URl());
+                saved.put(USER_UID_KEY, model.getUSER_Uid());
+
+                FirebaseDatabase.getInstance().getReference(USERS_DETAILS_KEY).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(SAVED_USERS_SECTION_KEY).child(model.getUSER_Uid()).updateChildren(saved).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
                         Toast.makeText(holder.follow_icon.getContext(), "saved", Toast.LENGTH_SHORT).show();
