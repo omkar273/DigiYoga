@@ -207,6 +207,19 @@
             </LinearLayout>
         </HorizontalScrollView>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/joinMeetingBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:backgroundTint="@color/colorPrimary"
+            android:clickable="true"
+            android:src="@drawable/video_call_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/scrollView3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
         <ScrollView
             android:id="@+id/scrollView3"
             android:layout_width="match_parent"

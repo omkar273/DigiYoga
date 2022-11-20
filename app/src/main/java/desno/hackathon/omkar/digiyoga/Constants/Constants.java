@@ -48,4 +48,8 @@ public class Constants {
     public static final String USERS_DP_STORAGE_SECTION_KEY = "User_Profile_pics";
     public static final String SAVED_USERS_SECTION_KEY = "Saved_Users";
 
+
+    //meeting id constants keys
+    public static final String MEETING_ID_TO_JOIN = "Meeting ID";
+
 }

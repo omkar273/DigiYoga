@@ -74,6 +74,7 @@ dependencies {
     // FirebaseUI for Cloud Storage
     implementation 'com.firebaseui:firebase-ui-storage:8.0.2'
 
-    //agora dependencies
-
+    //zego cloud dependencies
+    implementation 'com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:latest.release'
+    implementation 'com.github.ZEGOCLOUD:zego_uikit_prebuilt_video_conference_android:1.0.0'
 }

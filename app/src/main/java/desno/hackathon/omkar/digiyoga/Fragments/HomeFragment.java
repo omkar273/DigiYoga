@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import desno.hackathon.omkar.digiyoga.JoinMeetingActivity;
 import desno.hackathon.omkar.digiyoga.ModalClass.YogaWorkoutPlans;
 import desno.hackathon.omkar.digiyoga.R;
 import desno.hackathon.omkar.digiyoga.SavedUsersActivity;
@@ -75,13 +76,16 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        view.findViewById(R.id.saved_user_icon).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), SavedUsersActivity.class);
-                startActivity(intent);
-            }
+        view.findViewById(R.id.saved_user_icon).setOnClickListener(view12 -> {
+            Intent intent = new Intent(getContext(), SavedUsersActivity.class);
+            startActivity(intent);
         });
+
+        view.findViewById(R.id.joinMeetingBtn).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), JoinMeetingActivity.class);
+            startActivity(intent);
+        });
+
         return view;
     }
 

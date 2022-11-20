@@ -214,6 +214,7 @@ public class HomePageActivity extends AppCompatActivity {
                 break;
 
             case R.id.rate_us:
+                startActivity(new Intent(HomePageActivity.this, ConferenceActivity.class));
                 break;
 
             default:
